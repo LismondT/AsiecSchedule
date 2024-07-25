@@ -5,22 +5,26 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:converters="clr-namespace:AsiecSchedule.Converters"
     xmlns:views="clr-namespace:AsiecSchedule.Views"
+    xmlns:data="clr-namespace:AsiecSchedule.Data"
     xmlns:local="clr-namespace:AsiecSchedule"
     Shell.FlyoutBehavior="Flyout"
     Title="AsiecSchedule">
 
     <Shell.FlyoutHeader>
+        
         <Frame Margin="0"
                Padding="10"
                CornerRadius="0"
-               BackgroundColor="{StaticResource PrimaryDark}"
-               >
-            <Label Text="{Binding Converter={converters:RequestIDConverter}}"
+               BackgroundColor="{StaticResource PrimaryDark}">
+            
+            <Label x:Name="RequestIDLabel"
                    HorizontalOptions="Center"
                    FontSize="Medium"
                    FontAttributes="Bold"
                    TextColor="{StaticResource PrimaryDarkText}"/>
+        
         </Frame>
+    
     </Shell.FlyoutHeader>
     
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">

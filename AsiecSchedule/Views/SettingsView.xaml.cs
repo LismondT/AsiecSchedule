@@ -76,6 +76,8 @@ public partial class SettingsView : ContentPage
             string item = picker.Items[selectedIndex];
             AppSettings.RequestID = item;
         }
+
+		AppGlobals.UpdateRequestIDLabel?.Invoke();
     }
 
 
