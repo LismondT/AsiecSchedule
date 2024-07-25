@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:AsiecSchedule.Converters"
+             x:Class="AsiecSchedule.Views.InfoView"
+             Title="Предстоящие пары">
+    <Grid>
+        
+        <Grid.RowDefinitions>
+
+            <RowDefinition Height="auto" />
+
+            <RowDefinition Height="auto" />
+
+        </Grid.RowDefinitions>
+
+
+        <Frame Grid.Row="0">
+
+            <StackLayout>
+
+                <Label x:Name="CurrentStateText"
+                       Text="Сейчас:"
+                       FontSize="Title"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" />
+
+                <Frame Style="{StaticResource AccentFrame}">
+
+                    <Label x:Name="CurrentStateTitle"
+                           Style="{StaticResource AccentLabel}" Text="Математика"
+                           HorizontalOptions="Center"/>
+
+                </Frame>
+
+                <Frame x:Name="CurrentStateInfo"
+                       BorderColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                       Margin="0, 5, 0, 0"
+                       Padding="14">
+
+                    <StackLayout>
+
+                        <Label x:Name="CurrentStateTeacherTitle"
+                               FontSize="Subtitle" />
+
+                        <Label x:Name="CurrentStateLocationTitle"
+                               FontSize="Subtitle" />
+
+                    </StackLayout>
+
+                </Frame>
+
+                <Frame x:Name="CurrentStateTimeToEndFrame"
+                       Style="{StaticResource AccentFrame}">
+
+                    <Label x:Name="CurrentStateTimeToEnd"
+                           Style="{StaticResource AccentLabel}" />
+
+                </Frame>
+
+            </StackLayout>
+
+        </Frame>
+        
+        <!--DEBUG-->
+        
+        <Frame Grid.Row="1"
+               VerticalOptions="End"
+               IsVisible="{Binding Converter={converters:IsDebugConverter}}">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+
+                    <RowDefinition Height="*" />
+
+                    <RowDefinition Height="*" />
+
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="auto" />
+
+                    <ColumnDefinition Width="*" />
+
+                    <ColumnDefinition Width="auto" />
+
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Панель отладки"
+                       HorizontalOptions="Center"
+                       Grid.Row="0"
+                       Grid.ColumnSpan="3" />
+
+                <Label Text="Время:"
+                       VerticalOptions="Center"
+                       Grid.Row="1"
+                       Grid.Column="0" />
+
+                <TimePicker x:Name="DebugTimePicker"
+                            Grid.Row="1"
+                            Grid.Column="1" />
+
+                <Button Text="Выбрать"
+                        Clicked="DebugSetTimeButton_Clicked"
+                        Grid.Row="1"
+                        Grid.Column="2" />
+
+            </Grid>
+
+        </Frame>
+
+    </Grid>
+</ContentPage>

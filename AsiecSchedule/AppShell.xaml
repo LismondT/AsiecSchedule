@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="AsiecSchedule.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:AsiecSchedule.Converters"
+    xmlns:views="clr-namespace:AsiecSchedule.Views"
+    xmlns:local="clr-namespace:AsiecSchedule"
+    Shell.FlyoutBehavior="Flyout"
+    Title="AsiecSchedule">
+
+    <Shell.FlyoutHeader>
+        <Frame Margin="0"
+               Padding="10"
+               CornerRadius="0"
+               BackgroundColor="{StaticResource PrimaryDark}"
+               >
+            <Label Text="{Binding Converter={converters:RequestIDConverter}}"
+                   HorizontalOptions="Center"
+                   FontSize="Medium"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource PrimaryDarkText}"/>
+        </Frame>
+    </Shell.FlyoutHeader>
+    
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+
+        <ShellContent
+            FlyoutIcon="{AppThemeBinding Light=schedule_page_icon.png, Dark=schedule_page_icon_dark.png}"
+            Title="Расписание"
+            Route="ScheduleView"
+            ContentTemplate="{DataTemplate views:ScheduleView}" />
+
+        <ShellContent
+            FlyoutIcon="{AppThemeBinding Light=info_page_icon.png, Dark=info_page_icon_dark.png}"
+            Title="Предстоящие пары"
+            Route="InfoView"
+            ContentTemplate="{DataTemplate views:InfoView}" />
+
+        <ShellContent
+            FlyoutIcon="{AppThemeBinding Light=settings_page_icon.png, Dark=settings_page_icon_dark.png}"
+            Title="Настройки"
+            Route="SettingsView"
+            ContentTemplate="{DataTemplate views:SettingsView}" />
+
+    </FlyoutItem>
+
+</Shell>

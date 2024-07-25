@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AsiecSchedule.Views.SettingsView"
+             Title="Настройки">
+    
+    <VerticalStackLayout>
+
+        <Frame Style="{StaticResource SettingFrame}">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="auto" />
+
+                    <ColumnDefinition Width="*" />
+
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Расписание по: "
+                       VerticalOptions="Center"
+                       Grid.Column="0" />
+
+                <Picker x:Name="RequestTypePicker"
+                        SelectedIndexChanged="RequestTypePicker_SelectedIndexChanged"
+                        Grid.Column="1" />
+
+            </Grid>
+
+        </Frame>
+
+        <Frame x:Name="RequestIDSettingFrame"
+               Style="{StaticResource SettingFrame}">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="auto" />
+
+                    <ColumnDefinition Width="*" />
+
+                </Grid.ColumnDefinitions>
+
+                <Label x:Name="ChooseRequestIDText"
+                       VerticalOptions="Center"
+                       Grid.Column="0" />
+
+                <Picker x:Name="RequestIDPicker"
+                        SelectedIndexChanged="RequestIDPicker_SelectedIndexChanged"
+                        Grid.Column="1" />
+
+            </Grid>
+            
+        </Frame>
+
+    </VerticalStackLayout>
+
+    <ContentPage.Resources>
+
+        <ResourceDictionary>
+
+            <Style TargetType="Frame" x:Key="SettingFrame">
+
+                <Setter Property="Margin" Value="10, 10, 10, 0" />
+                <Setter Property="Padding" Value="20, 10" />
+
+            </Style>
+            
+        </ResourceDictionary>
+        
+    </ContentPage.Resources>
+
+</ContentPage>

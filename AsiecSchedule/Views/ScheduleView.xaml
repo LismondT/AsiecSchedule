@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:AsiecSchedule.Models"
+             x:Class="AsiecSchedule.Views.ScheduleView"
+             Title="Расписание">
+    <Grid VerticalOptions="Fill">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <CollectionView x:Name="ScheduleCollection"
+                        Grid.Row="0"
+                        Margin="10, 0, 10, 0"
+                        VerticalScrollBarVisibility="Never"
+                        VerticalOptions="Start"
+                        ItemsSource="{Binding Days}"
+                        IsGrouped="True">
+
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <Frame Style="{StaticResource AccentFrame}">
+                        <Label Text="{Binding Name}"
+                               Style="{StaticResource AccentLabel}" />
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:LessonModel">
+                    <Frame
+                        Margin="0, 0, 0, 5"
+                        HasShadow="True">
+                        <StackLayout>
+                            <Label Text="{Binding Preview}" FontSize="Small" />
+                            <Label Text="{Binding NameTitle}" FontSize="Small" />
+                            <Label Text="{Binding TeacherTitle}" FontSize="Small" />
+                            <Label Text="{Binding Location}" FontSize="Small" />
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        
+        <Frame VerticalOptions="End"
+               Grid.Row="1"
+               Padding="0"
+               >
+            
+            <StackLayout VerticalOptions="End"
+                         Orientation="Horizontal"
+                         HorizontalOptions="Center">
+                
+                <DatePicker x:Name="FirstDatePicker" Margin="10" />
+                <DatePicker x:Name="SecondDatePicker" Margin="10" />
+                <Button Margin="10"
+                        Clicked="GetScheduleButton_Clicked"
+                        Text="Выбрать" />
+            
+            </StackLayout>
+        
+        </Frame>
+        
+    </Grid>
+</ContentPage>
