@@ -4,6 +4,14 @@
              xmlns:models="clr-namespace:AsiecSchedule.Models"
              x:Class="AsiecSchedule.Views.ScheduleView"
              Title="Расписание">
+
+    <ContentPage.ToolbarItems>
+
+        <ToolbarItem Text="Добавить заметку"
+                     IconImageSource="add_note_toolbar_icon_dark.png"
+                     Clicked="AddNoteToolbarItem_Clicked" />
+
+    </ContentPage.ToolbarItems>
     
     <Grid VerticalOptions="Fill">
 
@@ -20,19 +28,20 @@
                         Margin="10, 0, 10, 0"
                         VerticalScrollBarVisibility="Never"
                         VerticalOptions="Start"
-                        ItemsSource="{Binding Days}"
-                        IsGrouped="True">
+                        IsGrouped="True"
+                        SelectionMode="Single"
+                        SelectionChanged="ScheduleCollection_SelectionChanged">
 
             <CollectionView.GroupHeaderTemplate>
                 
                 <DataTemplate>
                 
-                    <Frame Style="{StaticResource AccentFrame}">
+                    <Border Style="{StaticResource CollectionHeaderBorder}">
                     
                         <Label Text="{Binding Name}"
                                Style="{StaticResource AccentLabel}" />
                     
-                    </Frame>
+                    </Border>
                 
                 </DataTemplate>
             
@@ -42,23 +51,21 @@
                 
                 <DataTemplate x:DataType="models:LessonModel">
                 
-                    <Frame
-                        Margin="0, 0, 0, 5"
-                        HasShadow="True">
-                    
+                    <Border Style="{StaticResource CollectionItemBorder}">
+
                         <StackLayout>
-                        
+                            
                             <Label Text="{Binding Preview}" FontSize="Small" />
-                            
+
                             <Label Text="{Binding NameTitle}" FontSize="Small" />
-                            
+
                             <Label Text="{Binding TeacherTitle}" FontSize="Small" />
-                            
+
                             <Label Text="{Binding Location}" FontSize="Small" />
-                        
+
                         </StackLayout>
-                    
-                    </Frame>
+
+                    </Border>
                 
                 </DataTemplate>
             
@@ -66,7 +73,6 @@
         
         </CollectionView>
 
-        
         <Frame VerticalOptions="End"
                Grid.Row="1"
                Padding="0">
@@ -88,5 +94,44 @@
         </Frame>
         
     </Grid>
+
+    <ContentPage.Resources>
+
+        <ResourceDictionary>
+
+            <Style TargetType="Border" x:Key="CollectionHeaderBorder">
+
+                <Setter Property="Padding" Value="20, 10" />
+                <Setter Property="Margin" Value="0, 10, 0, 5" />
+                <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 40,0,0,40" />
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+
+            </Style>
+
+            <Style TargetType="Border" x:Key="CollectionItemBorder">
+
+                <Setter Property="Margin" Value="0, 0, 0, 5" />
+                <Setter Property="Padding" Value="20" />
+                <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 0,20,20,0" />
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+            
+        </ResourceDictionary>
+        
+    </ContentPage.Resources>
 
 </ContentPage>

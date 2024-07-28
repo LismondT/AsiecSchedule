@@ -12,8 +12,9 @@
 
             <RowDefinition Height="auto" />
 
-        </Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
 
+        </Grid.RowDefinitions>
 
         <Frame Grid.Row="0">
 
@@ -21,9 +22,7 @@
 
                 <Label x:Name="CurrentStateText"
                        Text="Сейчас:"
-                       FontSize="Title"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center" />
+                       Style="{StaticResource StateLabel}" />
 
                 <Frame Style="{StaticResource AccentFrame}">
 
@@ -41,10 +40,10 @@
                     <StackLayout>
 
                         <Label x:Name="CurrentStateTeacherTitle"
-                               FontSize="Subtitle" />
+                               FontSize="Small" />
 
                         <Label x:Name="CurrentStateLocationTitle"
-                               FontSize="Subtitle" />
+                               FontSize="Small" />
 
                     </StackLayout>
 
@@ -54,7 +53,45 @@
                        Style="{StaticResource AccentFrame}">
 
                     <Label x:Name="CurrentStateTimeToEnd"
-                           Style="{StaticResource AccentLabel}" />
+                           Style="{StaticResource AccentLabel}"
+                           HorizontalOptions="Center" />
+
+                </Frame>
+
+            </StackLayout>
+
+        </Frame>
+
+        <Frame x:Name="NextStateFrame"
+               Grid.Row="1">
+
+            <StackLayout>
+
+                <Label Text="Следующее:"
+                       Style="{StaticResource StateLabel}" />
+
+                <Frame Style="{StaticResource AccentFrame}">
+
+                    <Label x:Name="NextStateTitle"
+                           Style="{StaticResource AccentLabel}"
+                           HorizontalOptions="Center"/>
+
+                </Frame>
+
+                <Frame x:Name="NextStateInfo"
+                       BorderColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                       Margin="0, 5, 0, 0"
+                       Padding="14">
+
+                    <StackLayout>
+
+                        <Label x:Name="NextStateTeacherTitle"
+                               FontSize="Subtitle" />
+
+                        <Label x:Name="NextStateLocationTitle"
+                               FontSize="Subtitle" />
+
+                    </StackLayout>
 
                 </Frame>
 
@@ -64,17 +101,16 @@
         
         <!--DEBUG-->
         
-        <Frame Grid.Row="1"
-               VerticalOptions="End"
-               IsVisible="{Binding Converter={converters:IsDebugConverter}}">
+        <Frame x:Name="DebugMenuFrame"
+               Grid.Row="2">
 
             <Grid>
 
                 <Grid.RowDefinitions>
 
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
 
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
 
                 </Grid.RowDefinitions>
 
@@ -112,4 +148,18 @@
         </Frame>
 
     </Grid>
+
+    <ContentPage.Resources>
+
+        <ResourceDictionary>
+
+            <Style TargetType="Label" x:Key="StateLabel">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+            
+        </ResourceDictionary>
+        
+    </ContentPage.Resources>
 </ContentPage>

@@ -8,15 +8,7 @@
 
         <Frame Style="{StaticResource SettingFrame}">
 
-            <Grid>
-
-                <Grid.ColumnDefinitions>
-
-                    <ColumnDefinition Width="auto" />
-
-                    <ColumnDefinition Width="*" />
-
-                </Grid.ColumnDefinitions>
+            <Grid ColumnDefinitions="{StaticResource SettingColumnDefinition}">
 
                 <Label Text="Расписание по: "
                        VerticalOptions="Center"
@@ -33,15 +25,7 @@
         <Frame x:Name="RequestIDSettingFrame"
                Style="{StaticResource SettingFrame}">
 
-            <Grid>
-
-                <Grid.ColumnDefinitions>
-
-                    <ColumnDefinition Width="auto" />
-
-                    <ColumnDefinition Width="*" />
-
-                </Grid.ColumnDefinitions>
+            <Grid ColumnDefinitions="{StaticResource SettingColumnDefinition}">
 
                 <Label x:Name="ChooseRequestIDText"
                        VerticalOptions="Center"
@@ -53,6 +37,29 @@
 
             </Grid>
             
+        </Frame>
+
+        <Frame Style="{StaticResource SettingFrame}">
+            
+            <Grid ColumnDefinitions="{StaticResource SettingColumnDefinition}">
+                
+                <Label Text="Режим отладки:"
+                       VerticalOptions="Center"
+                       Grid.Column="0" />
+
+                <Picker x:Name="IsDebugPicker"
+                        SelectedIndexChanged="IsDebugPicker_SelectedIndexChanged"
+                        Grid.Column="1">
+                    
+                    <Picker.Items>
+                        <x:String>включить</x:String>
+                        <x:String>выключить</x:String>
+                    </Picker.Items>
+                
+                </Picker>
+
+            </Grid>
+
         </Frame>
 
     </VerticalStackLayout>
@@ -67,6 +74,13 @@
                 <Setter Property="Padding" Value="20, 10" />
 
             </Style>
+
+            <ColumnDefinitionCollection x:Key="SettingColumnDefinition">
+
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+
+            </ColumnDefinitionCollection>
             
         </ResourceDictionary>
         

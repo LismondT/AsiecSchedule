@@ -7,7 +7,7 @@ namespace AsiecSchedule
         public AppShell()
         {
             InitializeComponent();
-            AppGlobals.UpdateRequestIDLabel = UpdateRequestIDLabel;
+            AppGlobals.FlyoutMenuUpdateRequestIDLabel = UpdateRequestIDLabel;
         }
 
         protected override void OnAppearing()

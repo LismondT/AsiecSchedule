@@ -1,5 +1,7 @@
+using AsiecSchedule.Data;
 using AsiecSchedule.Data.Asiec;
 using AsiecSchedule.Models;
+using AsiecSchedule.Utils;
 using AsiecSchedule.ViewModels;
 
 namespace AsiecSchedule.Views;
@@ -9,6 +11,8 @@ public partial class ScheduleView : ContentPage
     public ScheduleView()
     {
         InitializeComponent();
+
+        ScheduleCollection.ItemsSource = AppGlobals.Days;
     }
 
     private async void GetScheduleButton_Clicked(object sender, EventArgs e)
@@ -31,11 +35,11 @@ public partial class ScheduleView : ContentPage
         //LoadSchedule(schedule);
         
         //Debug
-        List<DayModel> days = GetFilledDays();
+        List<DayModel> days = DebugUtils.GetFilledDays();
 
 
 
-        GroupedDaysViewModel daysViewModel = new GroupedDaysViewModel(days);
+        GroupedDaysViewModel daysViewModel = new(days);
 
         ScheduleCollection.ItemsSource = daysViewModel.Days;
     }
@@ -48,52 +52,17 @@ public partial class ScheduleView : ContentPage
         ScheduleCollection.ItemsSource = schedule.Days;
     }
 
-
-    private List<DayModel> GetFilledDays()
+    private void ScheduleCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        List<DayModel> days = new List<DayModel>();
+        if (e.CurrentSelection.FirstOrDefault() is not LessonModel lesson) return;
 
-        LessonModel firstLesson = new LessonModel()
-        {
-            Name = "FirstLessonNamePlaceholder",
-            Group = "FirstLessonGroupPlaceholder",
-            Classroom = "FirstLessonClassroomPlaceholder",
-            Territory = "FirstLessonTerritoryPlaceholder",
-            Teacher = "FirstLessonTeacherPlaceholder",
-            StartTime = new TimeSpan(16, 0, 0),
-            EndTime = new TimeSpan(16, 30, 0)
-        };
+        DisplayAlert(lesson.Name, lesson.TeacherTitle, "OK");
 
-        LessonModel secondLesson = new LessonModel()
-        {
-            Name = "SecondLessonNamePlaceholder",
-            Group = "SecondLessonGroupPlaceholder",
-            Classroom = "SecondLessonClassroomPlaceholder",
-            Territory = "SecondLessonTerritoryPlaceholder",
-            Teacher = "SecondLessonTeacherPlaceholder",
-            StartTime = new TimeSpan(16, 30, 0),
-            EndTime = new TimeSpan(17, 0, 0)
-        };
+        ((CollectionView)sender).SelectedItem = null;
+    }
 
-        LessonModel thirdLesson = new LessonModel()
-        {
-            Name = "ThirdLessonNamePlaceholder",
-            Group = "ThirdLessonGroupPlaceholder",
-            Classroom = "ThirdLessonClassroomPlaceholder",
-            Territory = "ThirdLessonTerritoryPlaceholder",
-            Teacher = "ThirdLessonTeacherPlaceholder",
-            StartTime = new TimeSpan(17, 30, 0),
-            EndTime = new TimeSpan(18, 0, 0)
-        };
-
-        for (int i = 1; i < 12; i++)
-        {
-            DateTime date = new(2024, 7, i);
-            List<LessonModel> lessons = new List<LessonModel>() { firstLesson, secondLesson, thirdLesson };
-
-            days.Add(new DayModel(date, lessons));
-        }
-
-        return days;
+    private void AddNoteToolbarItem_Clicked(object sender, EventArgs e)
+    {
+       
     }
 }

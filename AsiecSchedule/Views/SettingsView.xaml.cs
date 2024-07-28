@@ -8,7 +8,7 @@ public partial class SettingsView : ContentPage
 	private readonly Dictionary<string, RequestType> _itemToRequestType = new()
 	{
 		{ "группе",		  RequestType.GroupId	  },
-		{ "преподвателю", RequestType.TeacherId   },
+		{ "преподавателю", RequestType.TeacherId   },
 		{ "аудитории",    RequestType.ClassroomId },
 	};
 
@@ -29,11 +29,13 @@ public partial class SettingsView : ContentPage
     {
         base.OnAppearing();
 
+		//RequestType
 		RequestTypePicker.ItemsSource = _itemToRequestType.Keys.ToArray();
 		RequestTypePicker.Title = AppSettings.RequestType == RequestType.None
 			? "выбрать"
 			: _itemToRequestType.FirstOrDefault(x => x.Value == AppSettings.RequestType).Key;
 
+		//RequestID
 		if (AppSettings.RequestType != RequestType.None)
 		{
 			UpdateRequestIDSetting();
@@ -48,6 +50,10 @@ public partial class SettingsView : ContentPage
 			RequestIDSettingFrame.IsVisible = false;
 		}
 
+		//Debug
+		IsDebugPicker.Title = AppSettings.IsDebug
+			? "включить"
+			: "выключить";
     }
 
 
@@ -77,7 +83,7 @@ public partial class SettingsView : ContentPage
             AppSettings.RequestID = item;
         }
 
-		AppGlobals.UpdateRequestIDLabel?.Invoke();
+		AppGlobals.FlyoutMenuUpdateRequestIDLabel?.Invoke();
     }
 
 
@@ -85,5 +91,19 @@ public partial class SettingsView : ContentPage
 	{
         RequestIDPicker.ItemsSource = AsiecData.GetIDDict(AppSettings.RequestType).Keys.ToArray();
         ChooseRequestIDText.Text = _typeToRequestIDLabelText[AppSettings.RequestType];
+    }
+
+    private void IsDebugPicker_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        Picker picker = (Picker)sender;
+        int selectedIndex = picker.SelectedIndex;
+
+        if (selectedIndex != -1)
+        {
+            string item = picker.Items[selectedIndex];
+            AppSettings.IsDebug = item == "включить"
+				? true
+				: false;
+        }
     }
 }

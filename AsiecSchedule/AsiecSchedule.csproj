@@ -56,6 +56,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\add_note_toolbar_icon.png" />
 	  <None Remove="Resources\Images\info_page_icon.png" />
 	  <None Remove="Resources\Images\menu.png" />
 	  <None Remove="Resources\Images\schedule_page_icon.png" />
