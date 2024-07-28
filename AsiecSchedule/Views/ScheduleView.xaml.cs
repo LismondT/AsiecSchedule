@@ -8,6 +8,9 @@ namespace AsiecSchedule.Views;
 
 public partial class ScheduleView : ContentPage
 {
+    private bool _addNoteMode = false;
+
+    
     public ScheduleView()
     {
         InitializeComponent();
@@ -15,6 +18,7 @@ public partial class ScheduleView : ContentPage
         ScheduleCollection.ItemsSource = AppGlobals.Days;
     }
 
+    
     private async void GetScheduleButton_Clicked(object sender, EventArgs e)
     {
         DateTime firstDate = FirstDatePicker.Date.AddDays(-60);
@@ -44,25 +48,27 @@ public partial class ScheduleView : ContentPage
         ScheduleCollection.ItemsSource = daysViewModel.Days;
     }
 
-    private void LoadSchedule(ScheduleModel schedule)
+    
+    private async void ScheduleCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (schedule == null || schedule.Days == null)
+        if (!_addNoteMode)
+        {
+            ((CollectionView)sender).SelectedItem = null;
+            return;
+        }
+
+        if (e.CurrentSelection.FirstOrDefault() is not LessonModel lesson)
             return;
 
-        ScheduleCollection.ItemsSource = schedule.Days;
-    }
-
-    private void ScheduleCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (e.CurrentSelection.FirstOrDefault() is not LessonModel lesson) return;
-
-        DisplayAlert(lesson.Name, lesson.TeacherTitle, "OK");
+        await Navigation.PushModalAsync(new AddNoteView(lesson));
 
         ((CollectionView)sender).SelectedItem = null;
+        _addNoteMode = false;
     }
+
 
     private void AddNoteToolbarItem_Clicked(object sender, EventArgs e)
     {
-       
+        _addNoteMode = true;
     }
 }

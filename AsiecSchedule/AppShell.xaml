@@ -47,6 +47,10 @@
             Route="SettingsView"
             ContentTemplate="{DataTemplate views:SettingsView}" />
 
+        <ShellContent
+            Title="AddNoteTest"
+            ContentTemplate="{DataTemplate views:AddNoteView}" />
+
     </FlyoutItem>
 
 </Shell>
