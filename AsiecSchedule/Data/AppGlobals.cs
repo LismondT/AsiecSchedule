@@ -8,8 +8,9 @@ namespace AsiecSchedule.Data
     public static class AppGlobals
     {
         public static UpdateItem? FlyoutMenuUpdateRequestIDLabel { get; set; }
-
         public static List<DayModel> Days { get; set; } = DebugUtils.GetFilledDays();
         public static DayModel CurrentDay { get; set; } = Days[0];
+
+        public static List<NoteModel> Notes { get; set; } = [];
     }
 }

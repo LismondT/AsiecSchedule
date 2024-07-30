@@ -12,6 +12,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
 
         </Grid.RowDefinitions>
 
@@ -22,18 +23,14 @@
 
         </Grid.ColumnDefinitions>
 
-        <Frame Grid.Row="0"
-               Grid.ColumnSpan="2">
+        <Frame Grid.ColumnSpan="2"
+               Style="{StaticResource NoteSettingFrame}">
 
             <StackLayout x:Name="LessonStackLayout">
-
-                <Label Text="{Binding Preview}" FontSize="Small" />
 
                 <Label Text="{Binding NameTitle}" FontSize="Small" />
 
                 <Label Text="{Binding TeacherTitle}" FontSize="Small" />
-
-                <Label Text="{Binding Location}" FontSize="Small" />
 
             </StackLayout>
 
@@ -41,19 +38,119 @@
 
         <Border Grid.Row="1"
                 Grid.ColumnSpan="2">
-            
-            <Editor Placeholder="Напишите заметку" />
-            
+
+            <Grid RowDefinitions="*, auto, auto, auto"
+                  ColumnDefinitions="*,*,*,*,*">
+
+                <Editor Grid.ColumnSpan="5"
+                        Placeholder="Напишите заметку" />
+
+                <CollectionView x:Name="FilesCollection"
+                                Grid.Row="1"
+                                Grid.ColumnSpan="5">
+
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+
+                        <DataTemplate>
+
+                            <Frame
+                                Padding="5"
+                                Margin="5, 0, 0, 5"
+                                HeightRequest="32"
+                                CornerRadius="0">
+
+                                <Label Text="{Binding .}" />
+
+                            </Frame>
+                            
+                        </DataTemplate>
+                        
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+                <CollectionView x:Name="ImagesCollection"
+                                Margin="0, 0, 0, 5"
+                                Grid.Row="2"
+                                Grid.ColumnSpan="5">
+
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+
+                        <DataTemplate>
+
+                            <Image HeightRequest="64"
+                                   WidthRequest="64"
+                                   Aspect="AspectFill"
+                                   Source="{Binding .}" />
+
+                        </DataTemplate>
+                        
+                    </CollectionView.ItemTemplate>
+                    
+                </CollectionView>
+
+                <ImageButton Grid.Row="3"
+                             Grid.Column="2"
+                             Source="{AppThemeBinding Light=editor_file_button.png, Dark=editor_file_button_dark.png}"
+                             Style="{StaticResource EditorButton}"
+                             Clicked="AddFileButton_Clicked" />
+
+                <ImageButton Grid.Row="3"
+                             Grid.Column="3"
+                             Source="{AppThemeBinding Light=editor_image_button.png, Dark=editor_image_button_dark.png}"
+                             Style="{StaticResource EditorButton}"
+                             Clicked="AddImageButton_Clicked" />
+
+                <ImageButton Grid.Row="3"
+                             Grid.Column="4"
+                             Source="{AppThemeBinding Light=editor_photo_button.png, Dark=editor_photo_button_dark.png}"
+                             Style="{StaticResource EditorButton}"
+                             Clicked="TakePhotoButton_Clicked" />
+            </Grid>
+
         </Border>
 
-        <Button Grid.Row="2"
+        <Frame Grid.Row="2"
+               Grid.ColumnSpan="2"
+               Style="{StaticResource NoteSettingFrame}">
+
+            <Grid RowDefinitions="auto,auto"
+                  ColumnDefinitions="auto,auto">
+
+                <Label Text="Заметка на следующую пару"
+                       Style="{StaticResource NoteSettingLabel}" />
+                
+                <Label Grid.Row="1"
+                       Text="Учитывать самостятельную нагрузку"
+                       Style="{StaticResource NoteSettingLabel}" />
+
+                <CheckBox Grid.Column="1" />
+                
+                <CheckBox Grid.Row="1"
+                          Grid.Column="1" />
+
+            </Grid>
+            
+        </Frame>
+
+        <Button Grid.Row="3"
                 Grid.Column="1"
                 Text="Сохранить"
+                Clicked="SaveButton_Clicked"
                 Style="{StaticResource AddNoteButton}" />
 
-        <Button Grid.Row="2"
+        <Button Grid.Row="3"
                 Grid.Column="0"
                 Text="Отмена"
+                Clicked="CancelButton_Clicked"
                 Style="{StaticResource AddNoteButton}" />
 
     </Grid>
@@ -74,10 +171,32 @@
                 <Setter Property="Stroke" Value="{AppThemeBinding
                     Light={StaticResource Black},
                     Dark={StaticResource White}}" />
-                <Setter Property="StrokeShape" Value="RoundRectangle 10,10,10,10" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 10, 10, 10, 10" />
 
             </Style>
-            
+
+            <Style TargetType="ImageButton" x:Key="EditorButton">
+
+                <Setter Property="Margin" Value="0, 0, 0, 10" />
+                <Setter Property="Padding" Value="3" />
+                <Setter Property="HeightRequest" Value="32" />
+                <Setter Property="Aspect" Value="AspectFit" />
+
+            </Style>
+
+            <Style TargetType="Frame" x:Key="NoteSettingFrame">
+
+                <Setter Property="Padding" Value="20, 10, 20, 10" />
+                <Setter Property="CornerRadius" Value="0" />
+
+            </Style>
+
+            <Style TargetType="Label" x:Key="NoteSettingLabel">
+
+                <Setter Property="VerticalOptions" Value="Center" />
+
+            </Style>
+
         </ResourceDictionary>
         
     </ContentPage.Resources>

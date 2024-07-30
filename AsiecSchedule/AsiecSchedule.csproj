@@ -57,6 +57,9 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\add_note_toolbar_icon.png" />
+	  <None Remove="Resources\Images\editor_file_button.png" />
+	  <None Remove="Resources\Images\editor_image_button.png" />
+	  <None Remove="Resources\Images\editor_photo_button.png" />
 	  <None Remove="Resources\Images\info_page_icon.png" />
 	  <None Remove="Resources\Images\menu.png" />
 	  <None Remove="Resources\Images\schedule_page_icon.png" />
@@ -84,5 +87,7 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
+
+	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionAsiecScheduleHideInfoBar="True" XamarinHotReloadUnhandledDeviceExceptionAsiecScheduleHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
 </Project>
