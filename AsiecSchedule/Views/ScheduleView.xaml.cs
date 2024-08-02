@@ -53,16 +53,16 @@ public partial class ScheduleView : ContentPage
     {
         if (!_addNoteMode)
         {
-            ((CollectionView)sender).SelectedItem = null;
+            ((CollectionView)sender).SelectedItem = 0;
             return;
         }
 
-        if (e.CurrentSelection.FirstOrDefault() is not LessonModel lesson)
+        if (e.CurrentSelection[0] is not LessonModel lesson)
             return;
 
         await Navigation.PushModalAsync(new AddNoteView(lesson));
 
-        ((CollectionView)sender).SelectedItem = null;
+        ((CollectionView)sender).SelectedItem = 0;
         _addNoteMode = false;
     }
 

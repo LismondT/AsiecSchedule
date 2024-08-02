@@ -1,4 +1,6 @@
-﻿using AsiecSchedule.Models;
+﻿using AsiecSchedule.Data;
+using AsiecSchedule.Models;
+using System.Collections.ObjectModel;
 using System.Text.Json;
 
 namespace AsiecSchedule.Utils
@@ -8,18 +10,16 @@ namespace AsiecSchedule.Utils
         public static void SaveNote(NoteModel model)
         {
             string json = JsonSerializer.Serialize(model);
-            //string path = FileSystem.CacheDirectory + "notes/";
-            //string filepath = path + model.ID + ".json";
-            string filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "notes");
+            string filepath = AppSettings.NotesPath;
 
             if (!Directory.Exists(filepath)) Directory.CreateDirectory(filepath);
 
             File.WriteAllText(filepath + $"/{model.ID}.json", json);
         }
 
-        public static List<NoteModel> GetNotes()
+        public static ObservableCollection<NoteModel> GetNotes()
         {
-            string filespath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "notes");
+            string filespath = AppSettings.NotesPath;
 
             if (!Directory.Exists(filespath)) return [];
 
@@ -27,7 +27,7 @@ namespace AsiecSchedule.Utils
                 .EnumerateFiles(filespath)
                 .Select(filepath => JsonSerializer.Deserialize<NoteModel>(File.ReadAllText(filepath)));
 
-            List<NoteModel> notes = [];
+            ObservableCollection<NoteModel> notes = [];
 
             foreach (NoteModel? noteModel in noteModels)
             {

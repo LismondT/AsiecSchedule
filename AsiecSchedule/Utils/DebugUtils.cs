@@ -7,7 +7,6 @@ namespace AsiecSchedule.Utils
     {
         public static List<DayModel> GetFilledDays()
         {
-
             List<DayModel> days = [];
 
             string[] names = ["Математика", "Обществознание", "Литература", "Биология", "География"];
@@ -20,10 +19,8 @@ namespace AsiecSchedule.Utils
             {
                 DateTime date = new(2024, 7, i);
                 List<LessonModel> lessons = [];
-
-
-
                 int lessonsCount = Random.Shared.Next(2, 5);
+
                 for (int j = 1; j < lessonsCount; j++)
                 {
                     lessons.Add(new LessonModel()
@@ -35,7 +32,8 @@ namespace AsiecSchedule.Utils
                         Territory = territory[Random.Shared.Next(territory.Length)],
                         Teacher = teachers[Random.Shared.Next(teachers.Length)],
                         StartTime = new TimeSpan(j, 30, 0),
-                        EndTime = new TimeSpan(j+1, 00, 0)
+                        EndTime = new TimeSpan(j+1, 00, 0),
+                        Date = date
                     });
                 }
 

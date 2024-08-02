@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:AsiecSchedule.Models"
+             x:Class="AsiecSchedule.Views.AllNotesView"
+             Title="AllNotesView">
+
+    <VerticalStackLayout>
+
+        <CollectionView x:Name="NotesCollection"
+                        SelectionMode="Single"
+                        SelectionChanged="NotesCollection_SelectionChanged">
+
+            <CollectionView.ItemTemplate>
+
+                <DataTemplate x:DataType="models:NoteModel">
+
+                    <Border Style="{StaticResource CollectionBorder}">
+
+                        <Grid RowDefinitions="auto, auto">
+
+                            <Frame Style="{StaticResource AccentFrame}">
+
+                                <Label Style="{StaticResource AccentLabel}" 
+                                       Text="{Binding Lesson.Date}" />
+
+                            </Frame>
+
+                            <Label Text="{Binding Text}"
+                                   MaxLines="3"
+                                   LineBreakMode="TailTruncation"
+                                   Grid.Row="1" />
+
+                        </Grid>
+                        
+                    </Border>
+                    
+                </DataTemplate>
+                
+            </CollectionView.ItemTemplate>
+            
+        </CollectionView>
+
+    </VerticalStackLayout>
+
+    <ContentPage.Resources>
+
+        <ResourceDictionary>
+
+            <Style TargetType="Border" x:Key="CollectionBorder">
+
+                <Setter Property="Margin" Value="0, 0, 0, 5" />
+                <Setter Property="Padding" Value="20" />
+                <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+        </ResourceDictionary>
+        
+    </ContentPage.Resources>
+
+</ContentPage>

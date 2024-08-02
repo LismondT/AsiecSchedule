@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AsiecSchedule.Views.NoteView"
+             Title="Заметка">
+    <Grid RowDefinitions="auto, auto">
+        
+        <CollectionView x:Name="ImagesCollection">
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+
+                <DataTemplate>
+
+                    <Image HeightRequest="64"
+                                   WidthRequest="64"
+                                   Aspect="AspectFill"
+                                   Source="{Binding .}" />
+
+                </DataTemplate>
+
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+        <CollectionView x:Name="FilesCollection"
+                        Grid.Row="1">
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+
+                <DataTemplate>
+
+                    <Frame Padding="5"
+                           Margin="5, 0, 0, 5"
+                           HeightRequest="32"
+                           CornerRadius="0">
+
+                        <Label Text="{Binding .}" />
+
+                    </Frame>
+
+                </DataTemplate>
+                
+            </CollectionView.ItemTemplate>
+            
+        </CollectionView>
+
+
+    </Grid>
+</ContentPage>

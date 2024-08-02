@@ -57,11 +57,11 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\add_note_toolbar_icon.png" />
+	  <None Remove="Resources\Images\allnotes_page_icon.png" />
 	  <None Remove="Resources\Images\editor_file_button.png" />
 	  <None Remove="Resources\Images\editor_image_button.png" />
 	  <None Remove="Resources\Images\editor_photo_button.png" />
 	  <None Remove="Resources\Images\info_page_icon.png" />
-	  <None Remove="Resources\Images\menu.png" />
 	  <None Remove="Resources\Images\schedule_page_icon.png" />
 	  <None Remove="Resources\Images\settings_page_icon.png" />
 	</ItemGroup>
@@ -77,7 +77,13 @@
 	  <MauiXaml Update="Views\AddNoteView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\AllNotesView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\InfoView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\NoteView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\ScheduleView.xaml">
@@ -86,6 +92,10 @@
 	  <MauiXaml Update="Views\SettingsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Controls\" />
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionAsiecScheduleHideInfoBar="True" XamarinHotReloadUnhandledDeviceExceptionAsiecScheduleHideInfoBar="True" /></VisualStudio></ProjectExtensions>

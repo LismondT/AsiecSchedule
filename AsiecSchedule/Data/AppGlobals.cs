@@ -1,5 +1,8 @@
-﻿using AsiecSchedule.Models;
+﻿
+
+using AsiecSchedule.Models;
 using AsiecSchedule.Utils;
+using System.Collections.ObjectModel;
 
 namespace AsiecSchedule.Data
 {
@@ -11,6 +14,6 @@ namespace AsiecSchedule.Data
         public static List<DayModel> Days { get; set; } = DebugUtils.GetFilledDays();
         public static DayModel CurrentDay { get; set; } = Days[0];
 
-        public static List<NoteModel> Notes { get; set; } = [];
+        public static ObservableCollection<NoteModel> Notes { get; set; } = [];
     }
 }

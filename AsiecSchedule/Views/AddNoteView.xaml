@@ -24,13 +24,23 @@
         </Grid.ColumnDefinitions>
 
         <Frame Grid.ColumnSpan="2"
-               Style="{StaticResource NoteSettingFrame}">
+               Style="{StaticResource NoteSettingFrame}"
+               BackgroundColor="{StaticResource PrimaryDark}"
+               BorderColor="Transparent">
 
-            <StackLayout x:Name="LessonStackLayout">
+            <StackLayout x:Name="LessonStackLayout"
+                         x:DataType="models:LessonModel">
 
-                <Label Text="{Binding NameTitle}" FontSize="Small" />
+                <Label Text="{Binding DateTitle}"
+                       Style="{StaticResource NoteInfoLabel}"
+                       HorizontalOptions="Center"
+                       FontAttributes="Bold" />
 
-                <Label Text="{Binding TeacherTitle}" FontSize="Small" />
+                <Label Text="{Binding NameTitle}"
+                       Style="{StaticResource NoteInfoLabel}" />
+
+                <Label Text="{Binding TeacherTitle}"
+                       Style="{StaticResource NoteInfoLabel}" />
 
             </StackLayout>
 
@@ -42,30 +52,33 @@
             <Grid RowDefinitions="*, auto, auto, auto"
                   ColumnDefinitions="*,*,*,*,*">
 
-                <Editor Grid.ColumnSpan="5"
+                <Editor x:Name="NoteEditor"
+                        Grid.ColumnSpan="5"
                         Placeholder="Напишите заметку" />
 
                 <CollectionView x:Name="FilesCollection"
+                                SelectionChanged="FilesCollection_SelectionChanged"
+                                SelectionMode="Single"
+                                Margin="5, 0, 5, 0"
                                 Grid.Row="1"
                                 Grid.ColumnSpan="5">
 
                     <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Horizontal" />
+                        <LinearItemsLayout Orientation="Horizontal"
+                                           ItemSpacing="5" />
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
 
                         <DataTemplate>
 
-                            <Frame
-                                Padding="5"
-                                Margin="5, 0, 0, 5"
-                                HeightRequest="32"
-                                CornerRadius="0">
+                            <Border Padding="5"
+                                   HeightRequest="32"
+                                    Style="{StaticResource FileBorder}">
 
                                 <Label Text="{Binding .}" />
 
-                            </Frame>
+                            </Border>
                             
                         </DataTemplate>
                         
@@ -74,22 +87,27 @@
                 </CollectionView>
 
                 <CollectionView x:Name="ImagesCollection"
-                                Margin="0, 0, 0, 5"
+                                Margin="5, 0, 5, 5"
                                 Grid.Row="2"
                                 Grid.ColumnSpan="5">
 
                     <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Horizontal" />
+                        <LinearItemsLayout Orientation="Horizontal"
+                                           ItemSpacing="5" />
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
 
                         <DataTemplate>
 
-                            <Image HeightRequest="64"
-                                   WidthRequest="64"
-                                   Aspect="AspectFill"
-                                   Source="{Binding .}" />
+                            <Border Stroke="LightGray">
+
+                                <Image HeightRequest="64"
+                                       WidthRequest="64"
+                                       Aspect="AspectFill"
+                                       Source="{Binding .}" />
+
+                            </Border>
 
                         </DataTemplate>
                         
@@ -129,12 +147,14 @@
                        Style="{StaticResource NoteSettingLabel}" />
                 
                 <Label Grid.Row="1"
-                       Text="Учитывать самостятельную нагрузку"
+                       Text="Учитывать самостоятельную нагрузку"
                        Style="{StaticResource NoteSettingLabel}" />
 
-                <CheckBox Grid.Column="1" />
-                
-                <CheckBox Grid.Row="1"
+                <CheckBox x:Name="IsForNextLessonCheckBox"
+                          Grid.Column="1" />
+
+                <CheckBox x:Name="IsConsiderIndependentLoadCheckBox"
+                          Grid.Row="1"
                           Grid.Column="1" />
 
             </Grid>
@@ -168,10 +188,7 @@
 
             <Style TargetType="Border">
 
-                <Setter Property="Stroke" Value="{AppThemeBinding
-                    Light={StaticResource Black},
-                    Dark={StaticResource White}}" />
-                <Setter Property="StrokeShape" Value="RoundRectangle 10, 10, 10, 10" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 5, 5, 5, 5" />
 
             </Style>
 
@@ -187,7 +204,16 @@
             <Style TargetType="Frame" x:Key="NoteSettingFrame">
 
                 <Setter Property="Padding" Value="20, 10, 20, 10" />
-                <Setter Property="CornerRadius" Value="0" />
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="BorderColor" Value="White" />
+
+            </Style>
+
+            <Style TargetType="Label" x:Key="NoteInfoLabel">
+
+                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="TextColor" Value="{StaticResource PrimaryDarkText}" />
 
             </Style>
 

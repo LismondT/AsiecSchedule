@@ -40,16 +40,18 @@
             Title="Предстоящие пары"
             Route="InfoView"
             ContentTemplate="{DataTemplate views:InfoView}" />
+        
+        <ShellContent
+            FlyoutIcon="{AppThemeBinding Light=allnotes_page_icon.png, Dark=allnotes_page_icon_dark.png}"
+            Title="Заметки"
+            Route="AllNotesView"
+            ContentTemplate="{DataTemplate views:AllNotesView}" />
 
         <ShellContent
             FlyoutIcon="{AppThemeBinding Light=settings_page_icon.png, Dark=settings_page_icon_dark.png}"
             Title="Настройки"
             Route="SettingsView"
             ContentTemplate="{DataTemplate views:SettingsView}" />
-
-        <ShellContent
-            Title="AddNoteTest"
-            ContentTemplate="{DataTemplate views:AddNoteView}" />
 
     </FlyoutItem>
 

@@ -32,17 +32,23 @@ public partial class AddNoteView : ContentPage
         FilesCollection.ItemsSource = _fileNames;
     }
 
-    private void SaveButton_Clicked(object sender, EventArgs e)
+    private async void SaveButton_Clicked(object sender, EventArgs e)
     {
-        JsonUtils.SaveNote(new()
+        NoteModel model = new()
         {
             ID = AppGlobals.Notes.Count,
-            IsConsiderIndependentLoad = true,
-            IsForNextLesson = true,
+            Text = NoteEditor.Text,
+            IsConsiderIndependentLoad = IsConsiderIndependentLoadCheckBox.IsChecked,
+            IsForNextLesson = IsForNextLessonCheckBox.IsChecked,
             Lesson = _lesson,
             FilePaths = _fileFullpaths,
             ImagePaths = _imageFullpaths,
-        });
+        };
+
+        AppGlobals.Notes.Add(model);
+        JsonUtils.SaveNote(model);
+
+        await Navigation.PopModalAsync();
     }
 
     
@@ -55,7 +61,7 @@ public partial class AddNoteView : ContentPage
 
         foreach (string path in _imageFullpaths)
         {
-            File.Delete(path); 
+            File.Delete(path);
         }
 
         await Navigation.PopModalAsync();
@@ -128,4 +134,27 @@ public partial class AddNoteView : ContentPage
         }
     }
 
+
+    private async void FilesCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        string targetFilepath = "";
+
+        if (sender is CollectionView collection)
+            collection.SelectedItem = 0;
+
+        if (e.CurrentSelection[0] is not string targetFilename) return;
+
+        foreach (string path in _fileFullpaths)
+        {
+            string filename = Path.GetFileName(path);
+            
+            if (filename == targetFilename)
+            {
+                targetFilepath = path;
+                break;
+            }
+        }
+
+        await Launcher.Default.OpenAsync(new OpenFileRequest("????????", new ReadOnlyFile(targetFilepath)));
+    }
 }

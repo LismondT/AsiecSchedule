@@ -14,7 +14,7 @@
     </Style>
 
     <Style TargetType="Border">
-        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         <Setter Property="StrokeShape" Value="Rectangle"/>
         <Setter Property="StrokeThickness" Value="1"/>
     </Style>
@@ -442,6 +442,15 @@
         <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource White}, Dark={DynamicResource PrimaryDarkText}}" />
     </Style>
 
+
+    <Style TargetType="Border" x:Key="FileBorder">
+
+        <Setter Property="StrokeShape" Value="RoundRectangle 5, 5, 5, 5" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light=LightGray, Dark=Gray}" />
+
+    </Style>
+    
     <!--#endregion-->
     
 </ResourceDictionary>
