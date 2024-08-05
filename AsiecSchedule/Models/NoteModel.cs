@@ -4,7 +4,7 @@ namespace AsiecSchedule.Models
 {
     public class NoteModel
     {
-        public int ID { get; set; }
+        public string? ID { get; set; }
         public LessonModel? Lesson { get; set; }
         public string? Text { get; set; }
         public bool IsConsiderIndependentLoad { get; set; }

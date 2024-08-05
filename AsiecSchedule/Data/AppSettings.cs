@@ -70,6 +70,6 @@ namespace AsiecSchedule.Data
 
         public static bool IsDebug { get; set; } = true;
 
-        public static string NotesPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "notes");
+        public static string NotesPath => Path.Combine(FileSystem.CacheDirectory, "notes");
     }
 }

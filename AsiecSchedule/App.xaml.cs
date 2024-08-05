@@ -11,7 +11,7 @@ namespace AsiecSchedule
 
             MainPage = new AppShell();
 
-            AppGlobals.Notes = JsonUtils.GetNotes();
+            AppGlobals.Notes = NoteUtils.GetNotes();
         }
     }
 }

@@ -1,24 +1,41 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:AsiecSchedule.Controls"
              x:Class="AsiecSchedule.Views.NoteView"
              Title="Заметка">
-    <Grid RowDefinitions="auto, auto">
-        
-        <CollectionView x:Name="ImagesCollection">
+
+    <Grid RowDefinitions="48, auto, auto, auto"
+          ColumnDefinitions="*,*,*,*,*,*">
+
+        <ImageButton Source="{AppThemeBinding Light=editor_remove_button.png, Dark=editor_remove_button_dark.png}"
+                     Aspect="AspectFit"
+                     Padding="0, 10, 0, 10"
+                     Clicked="RemoveToolbarItem_Clicked"
+                     Grid.Column="5" />
+
+        <controls:LessonInfoControl x:Name="LessonInfo"
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="6" />
+
+        <CollectionView x:Name="ImagesCollection"
+                        Margin="5"
+                        MaximumHeightRequest="512"
+                        SelectionMode="Single"
+                        SelectionChanged="ImagesCollection_SelectionChanged"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="6">
 
             <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Horizontal" />
+                <LinearItemsLayout Orientation="Horizontal"
+                                   ItemSpacing="5" />
             </CollectionView.ItemsLayout>
 
             <CollectionView.ItemTemplate>
 
                 <DataTemplate>
 
-                    <Image HeightRequest="64"
-                                   WidthRequest="64"
-                                   Aspect="AspectFill"
-                                   Source="{Binding .}" />
+                    <Image Source="{Binding .}" />
 
                 </DataTemplate>
 
@@ -27,7 +44,8 @@
         </CollectionView>
 
         <CollectionView x:Name="FilesCollection"
-                        Grid.Row="1">
+                        Grid.Row="2"
+                        Grid.ColumnSpan="6">
 
             <CollectionView.ItemsLayout>
                 <LinearItemsLayout Orientation="Horizontal" />
@@ -52,6 +70,10 @@
             
         </CollectionView>
 
-
+        <Editor IsReadOnly="True"
+                Grid.Row="3"
+                Grid.ColumnSpan="6" />
+        
     </Grid>
+
 </ContentPage>

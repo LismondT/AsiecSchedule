@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:AsiecSchedule.Models"
+             xmlns:controls="clr-namespace:AsiecSchedule.Controls"
              x:Class="AsiecSchedule.Views.AddNoteView"
              Title="AddNoteView">
     
@@ -10,7 +11,7 @@
         <Grid.RowDefinitions>
 
             <RowDefinition Height="auto" />
-            <RowDefinition />
+            <RowDefinition Height="*"/>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
 
@@ -23,30 +24,12 @@
 
         </Grid.ColumnDefinitions>
 
-        <Frame Grid.ColumnSpan="2"
-               Style="{StaticResource NoteSettingFrame}"
-               BackgroundColor="{StaticResource PrimaryDark}"
-               BorderColor="Transparent">
+        <controls:LessonInfoControl x:Name="LessonInfo"
+                                    Grid.ColumnSpan="2"
+                                    Grid.Row="0" />
 
-            <StackLayout x:Name="LessonStackLayout"
-                         x:DataType="models:LessonModel">
-
-                <Label Text="{Binding DateTitle}"
-                       Style="{StaticResource NoteInfoLabel}"
-                       HorizontalOptions="Center"
-                       FontAttributes="Bold" />
-
-                <Label Text="{Binding NameTitle}"
-                       Style="{StaticResource NoteInfoLabel}" />
-
-                <Label Text="{Binding TeacherTitle}"
-                       Style="{StaticResource NoteInfoLabel}" />
-
-            </StackLayout>
-
-        </Frame>
-
-        <Border Grid.Row="1"
+        <Border Stroke="White"
+                Grid.Row="1"
                 Grid.ColumnSpan="2">
 
             <Grid RowDefinitions="*, auto, auto, auto"
@@ -73,7 +56,7 @@
                         <DataTemplate>
 
                             <Border Padding="5"
-                                   HeightRequest="32"
+                                    HeightRequest="32"
                                     Style="{StaticResource FileBorder}">
 
                                 <Label Text="{Binding .}" />
@@ -89,7 +72,9 @@
                 <CollectionView x:Name="ImagesCollection"
                                 Margin="5, 0, 5, 5"
                                 Grid.Row="2"
-                                Grid.ColumnSpan="5">
+                                Grid.ColumnSpan="5"
+                                SelectionMode="Single"
+                                SelectionChanged="ImagesCollection_SelectionChanged">
 
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Horizontal"
@@ -114,6 +99,13 @@
                     </CollectionView.ItemTemplate>
                     
                 </CollectionView>
+
+                <ImageButton x:Name="RemoveButton"
+                             Grid.Row="3"
+                             Grid.Column="0"
+                             Source="{AppThemeBinding Light=editor_remove_button.png, Dark=editor_remove_button_dark.png}"
+                             Style="{StaticResource EditorButton}"
+                             Clicked="RemoveButton_Clicked" />
 
                 <ImageButton Grid.Row="3"
                              Grid.Column="2"
@@ -206,7 +198,7 @@
                 <Setter Property="Padding" Value="20, 10, 20, 10" />
                 <Setter Property="CornerRadius" Value="5" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="BorderColor" Value="White" />
+                <Setter Property="BorderColor" Value="Transparent" />
 
             </Style>
 
@@ -224,7 +216,7 @@
             </Style>
 
         </ResourceDictionary>
-        
+
     </ContentPage.Resources>
 
 </ContentPage>

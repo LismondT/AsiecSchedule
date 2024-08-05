@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:AsiecSchedule.Models"
              x:Class="AsiecSchedule.Views.AllNotesView"
-             Title="AllNotesView">
+             Title="Заметки">
 
-    <VerticalStackLayout>
+    <Grid RowDefinitions="*">
 
         <CollectionView x:Name="NotesCollection"
                         SelectionMode="Single"
@@ -17,7 +17,7 @@
 
                     <Border Style="{StaticResource CollectionBorder}">
 
-                        <Grid RowDefinitions="auto, auto">
+                        <Grid RowDefinitions="auto, auto, auto">
 
                             <Frame Style="{StaticResource AccentFrame}">
 
@@ -26,10 +26,13 @@
 
                             </Frame>
 
+                            <Label Text="{Binding ID}"
+                                   Grid.Row="1" />
+
                             <Label Text="{Binding Text}"
                                    MaxLines="3"
                                    LineBreakMode="TailTruncation"
-                                   Grid.Row="1" />
+                                   Grid.Row="2" />
 
                         </Grid>
                         
@@ -41,7 +44,7 @@
             
         </CollectionView>
 
-    </VerticalStackLayout>
+    </Grid>
 
     <ContentPage.Resources>
 
