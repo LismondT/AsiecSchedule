@@ -8,11 +8,11 @@
            BorderColor="Transparent">
 
         <StackLayout x:Name="LessonStackLayout"
-                         x:DataType="models:LessonModel">
+                     x:DataType="models:LessonModel">
 
             <Label Text="{Binding DateTitle}"
-                       HorizontalOptions="Center"
-                       FontAttributes="Bold" />
+                   HorizontalOptions="Center"
+                   FontAttributes="Bold" />
 
             <Label Text="{Binding NameTitle}" />
 

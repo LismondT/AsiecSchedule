@@ -1,4 +1,5 @@
 ﻿using AsiecSchedule.Data;
+using AsiecSchedule.Update;
 using AsiecSchedule.Utils;
 
 namespace AsiecSchedule

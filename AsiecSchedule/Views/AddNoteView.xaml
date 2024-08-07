@@ -57,7 +57,7 @@
 
                             <Border Padding="5"
                                     HeightRequest="32"
-                                    Style="{StaticResource FileBorder}">
+                                    >
 
                                 <Label Text="{Binding .}" />
 

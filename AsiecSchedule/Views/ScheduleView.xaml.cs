@@ -1,6 +1,7 @@
 using AsiecSchedule.Data;
 using AsiecSchedule.Data.Asiec;
 using AsiecSchedule.Models;
+using AsiecSchedule.Update;
 using AsiecSchedule.Utils;
 using AsiecSchedule.ViewModels;
 
@@ -14,11 +15,39 @@ public partial class ScheduleView : ContentPage
     public ScheduleView()
     {
         InitializeComponent();
-
-        ScheduleCollection.ItemsSource = AppGlobals.Days;
     }
 
-    
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        ScheduleCollection.ItemsSource = AppGlobals.Days;
+
+        await AppUpdater.Init();
+
+        if (AppSettings.WasUpdated)
+            AppUpdater.FreeTempResources();
+
+        if (!AppUpdater.IsLatestVersion())
+        {
+            bool toUpdate = await DisplayAlert("Доступна новая версия",
+                $"Текущая версия: {AppUpdater.GetCurrentVersion()}\n" +
+                $"Последняя версия: {AppUpdater.GetLatestVersion()}",
+                "Обновить", "Не обновлять");
+
+            if (toUpdate)
+            {
+                await AppUpdater.Update();
+            }
+        }
+        else
+        {
+            await DisplayAlert("Последняя версия", "Установленна последняя версия", "ок");
+        }
+    }
+
+
     private async void GetScheduleButton_Clicked(object sender, EventArgs e)
     {
         DateTime firstDate = FirstDatePicker.Date.AddDays(-60);
@@ -33,6 +62,8 @@ public partial class ScheduleView : ContentPage
             await DisplayAlert("Некорректная дата", "Первая дата должна быть меньше второй", "ОК");
             return;
         }
+
+        
 
         //Schedule schedule = await AsiecParser.GetSchedule(requestId, requestType, firstDate, lastDate);
 

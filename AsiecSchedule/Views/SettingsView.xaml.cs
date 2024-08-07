@@ -1,5 +1,6 @@
 using AsiecSchedule.Data;
 using AsiecSchedule.Data.Asiec;
+using AsiecSchedule.Update;
 
 namespace AsiecSchedule.Views;
 
@@ -54,6 +55,9 @@ public partial class SettingsView : ContentPage
 		IsDebugPicker.Title = AppSettings.IsDebug
 			? "включить"
 			: "выключить";
+
+		//Version Label
+		VersionLabel.Text = AppUpdater.GetCurrentVersion();
     }
 
 
