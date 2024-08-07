@@ -7,7 +7,8 @@
 
     <ContentPage.ToolbarItems>
 
-        <ToolbarItem Text="Добавить заметку"
+        <ToolbarItem x:Name="AddNoteToolbarItem"
+                     Text="Добавить заметку"
                      IconImageSource="add_note_toolbar_icon_dark.png"
                      Clicked="AddNoteToolbarItem_Clicked" />
 
@@ -24,10 +25,9 @@
         </Grid.RowDefinitions>
 
         <CollectionView x:Name="ScheduleCollection"
-                        Grid.Row="0"
                         Margin="10, 0, 10, 0"
+                        MaximumWidthRequest="600"
                         VerticalScrollBarVisibility="Never"
-                        VerticalOptions="Start"
                         IsGrouped="True"
                         SelectionMode="Single"
                         SelectionChanged="ScheduleCollection_SelectionChanged">

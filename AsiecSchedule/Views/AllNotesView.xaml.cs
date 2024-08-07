@@ -14,6 +14,8 @@ public partial class AllNotesView : ContentPage
 
     private async void NotesCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        if (e.CurrentSelection.Count == 0) return;
+
         if (e.CurrentSelection[0] is not NoteModel note)
             return;
 

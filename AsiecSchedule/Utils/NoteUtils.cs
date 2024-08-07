@@ -10,13 +10,14 @@ namespace AsiecSchedule.Utils
         public static void SaveNote(NoteModel model)
         {
             string json = JsonSerializer.Serialize(model);
-            string filepath = GetNotePath(model);
+            string folderpath = GetNoteFolderPath(model);
 
-            if (!Directory.Exists(filepath))
-                Directory.CreateDirectory(filepath);
+            if (!Directory.Exists(folderpath))
+                Directory.CreateDirectory(folderpath);
 
-            File.WriteAllText(filepath, json);
+            File.WriteAllText(GetNotePath(model), json);
         }
+
 
         public static ObservableCollection<NoteModel> GetNotes()
         {
@@ -39,8 +40,10 @@ namespace AsiecSchedule.Utils
             return notes;
         }
 
+
         public static void DeleteNote(NoteModel model) => DeleteNote(model.ID);
 
+        
         public static void DeleteNote(string? id)
         {
             if (id == null) return;
@@ -60,12 +63,15 @@ namespace AsiecSchedule.Utils
                 File.Delete(filepath);
             }
 
-            AppGlobals.Notes.Remove(note);
             File.Delete(notePath);
+            Directory.Delete(GetNoteResourcesFolderPath(note));
+            Directory.Delete(GetNoteFolderPath(note));
+
+            AppGlobals.Notes.Remove(note);
         }
 
 
-        private static string GetNoteFolderPath(NoteModel note)
+        public static string GetNoteFolderPath(NoteModel note)
         {
             string folderPath = AppSettings.NotesPath + $"/{note.ID}/";
 
@@ -75,8 +81,9 @@ namespace AsiecSchedule.Utils
             return folderPath;
         }
 
+        public static string GetNoteFolderPath(string id) => GetNoteFolderPath(new NoteModel() { ID = id });
 
-        private static string GetNotePath(NoteModel note) => GetNoteFolderPath(note) + "note.json";
+        public static string GetNotePath(NoteModel note) => GetNoteFolderPath(note) + "note.json";
 
 
         public static string GetNoteResourcesFolderPath(NoteModel note)
@@ -89,6 +96,7 @@ namespace AsiecSchedule.Utils
             return folderPath;
         }
 
+        
         public static string GetNoteResourcesFolderPath(string id)
         {
             return GetNoteResourcesFolderPath(new NoteModel()

@@ -10,7 +10,7 @@ namespace AsiecSchedule
             InitializeComponent();
 
             MainPage = new AppShell();
-
+            
             AppGlobals.Notes = NoteUtils.GetNotes();
         }
     }

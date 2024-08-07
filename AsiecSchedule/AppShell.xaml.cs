@@ -19,7 +19,9 @@ namespace AsiecSchedule
 
         private void UpdateRequestIDLabel()
         {
-            RequestIDLabel.Text = AppSettings.RequestID;
+            RequestIDLabel.Text = AppSettings.RequestID == string.Empty
+                ? "Выберите группу в настройках"
+                : AppSettings.RequestID;
         }
     }
 }

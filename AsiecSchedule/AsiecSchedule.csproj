@@ -58,6 +58,7 @@
 	<ItemGroup>
 	  <None Remove="Resources\Images\add_note_toolbar_icon.png" />
 	  <None Remove="Resources\Images\allnotes_page_icon.png" />
+	  <None Remove="Resources\Images\arrow_left.png" />
 	  <None Remove="Resources\Images\editor_file_button.png" />
 	  <None Remove="Resources\Images\editor_image_button.png" />
 	  <None Remove="Resources\Images\editor_photo_button.png" />

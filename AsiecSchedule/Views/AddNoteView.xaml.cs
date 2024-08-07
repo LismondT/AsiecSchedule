@@ -2,39 +2,57 @@ using AsiecSchedule.Data;
 using AsiecSchedule.Models;
 using AsiecSchedule.Utils;
 using System.Collections.ObjectModel;
-using System.Globalization;
 
 namespace AsiecSchedule.Views;
 
 public partial class AddNoteView : ContentPage
 {
+    private bool _isToRemove = false;
     private readonly LessonModel _lesson;
     private readonly string _id;
-    private bool _isToRemove = false;
+
+    private readonly List<Stream> _streams;
 
     private readonly List<string> _fileFullpaths;
     private readonly List<string> _imageFullpaths;
 
     private readonly ObservableCollection<string> _fileNames;
     private readonly ObservableCollection<ImageSource> _imageSources;
-	
+    private readonly Dictionary<ImageSource, string> _imageSourceToPath;
+
+    
     public AddNoteView(LessonModel model)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
 
         _lesson = model;
         _id = Path.GetRandomFileName();
-		LessonInfo.BindingContext = _lesson;
+        LessonInfo.BindingContext = _lesson;
+
+        _streams = [];
 
         _fileFullpaths = [];
         _imageFullpaths = [];
 
         _fileNames = [];
         _imageSources = [];
+        _imageSourceToPath = [];
 
         ImagesCollection.ItemsSource = _imageSources;
         FilesCollection.ItemsSource = _fileNames;
     }
+
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+
+        foreach (Stream stream in _streams)
+        {
+            stream.Close();
+        }
+    }
+
 
     private async void CancelButton_Clicked(object sender, EventArgs e)
     {
@@ -48,9 +66,12 @@ public partial class AddNoteView : ContentPage
             File.Delete(path);
         }
 
+        Directory.Delete(NoteUtils.GetNoteResourcesFolderPath(_id));
+        Directory.Delete(NoteUtils.GetNoteFolderPath(_id));
+
         await Navigation.PopModalAsync();
     }
-
+    
     
     private async void SaveButton_Clicked(object sender, EventArgs e)
     {
@@ -83,12 +104,18 @@ public partial class AddNoteView : ContentPage
                 string localFilePath = Path.Combine(NoteUtils.GetNoteResourcesFolderPath(_id), photo.FileName);
 
                 using Stream sourceStream = await photo.OpenReadAsync();
-                using FileStream localFileStream = File.OpenWrite(localFilePath);
+                using (FileStream localFileStream = File.OpenWrite(localFilePath))
+                {
+                    await sourceStream.CopyToAsync(localFileStream);
+                };
 
-                await sourceStream.CopyToAsync(localFileStream);
+                Stream stream = File.OpenRead(localFilePath);
+                ImageSource source = ImageSource.FromStream(() => stream);
 
-                _imageFullpaths.Add(localFileStream.Name);
-                _imageSources.Add(ImageSource.FromFile(localFilePath));
+                _imageFullpaths.Add(localFilePath);
+                _imageSources.Add(source);
+                _imageSourceToPath.Add(source, localFilePath);
+                _streams.Add(stream);
             }
         }
     }
@@ -103,16 +130,22 @@ public partial class AddNoteView : ContentPage
             string localFilePath = Path.Combine(NoteUtils.GetNoteResourcesFolderPath(_id), photo.FileName);
 
             using Stream sourceStream = await photo.OpenReadAsync();
-            using FileStream localFileStream = File.OpenWrite(localFilePath);
+            using (FileStream localFileStream = File.OpenWrite(localFilePath))
+            {
+                await sourceStream.CopyToAsync(localFileStream);
+            }
 
-            await sourceStream.CopyToAsync(localFileStream);
+            Stream stream = File.OpenRead(localFilePath);
+            ImageSource source = ImageSource.FromStream(() => stream);
 
-            _imageFullpaths.Add(localFileStream.Name);
-            _imageSources.Add(ImageSource.FromFile(localFilePath));
+            _imageFullpaths.Add(localFilePath);
+            _imageSources.Add(source);
+            _imageSourceToPath.Add(source, localFilePath);
+            _streams.Add(stream);
         }
     }
 
-    
+
     private async void AddFileButton_Clicked(object sender, EventArgs e)
     {
         try
@@ -144,20 +177,22 @@ public partial class AddNoteView : ContentPage
         SetRemoveState(!_isToRemove);
     }
 
-    
+
     private async void FilesCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         string targetFilepath = "";
 
         if (sender is CollectionView collection)
-            collection.SelectedItem = 0;
+            collection.SelectedItem = null;
+
+        if (e.CurrentSelection.Count == 0) return;
 
         if (e.CurrentSelection[0] is not string targetFilename) return;
 
         foreach (string path in _fileFullpaths)
         {
             string filename = Path.GetFileName(path);
-            
+
             if (filename == targetFilename)
             {
                 targetFilepath = path;
@@ -174,18 +209,34 @@ public partial class AddNoteView : ContentPage
         }
         else
         {
-            await Launcher.Default.OpenAsync(new OpenFileRequest("????????", new ReadOnlyFile(targetFilepath)));
+            await Launcher.Default.OpenAsync(new OpenFileRequest("Выберете приложение", new ReadOnlyFile(targetFilepath)));
         }
     }
+
 
     private async void ImagesCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (sender is CollectionView collection)
-            collection.SelectedItem = 0;
+            collection.SelectedItem = null;
 
+        if (e.CurrentSelection.Count == 0) return;
         if (e.CurrentSelection[0] is not ImageSource source) return;
 
-        await Navigation.PushModalAsync(new ImagesViewerView(source));
+        string filepath = _imageSourceToPath[source];
+        
+        if (_isToRemove)
+        {
+
+            File.Delete(filepath);
+            _imageFullpaths.Remove(filepath);
+            _imageSourceToPath.Remove(source);
+            _imageSources.Remove(source);
+            SetRemoveState(false);
+        }
+        else
+        {
+            await Navigation.PushModalAsync(new ImagesViewerView(filepath));
+        }
     }
 
 
@@ -194,7 +245,7 @@ public partial class AddNoteView : ContentPage
         _isToRemove = isRemoveMode;
 
         string icon;
-        
+
         if (!_isToRemove)
         {
             icon = Application.Current?.RequestedTheme == AppTheme.Light
@@ -207,7 +258,7 @@ public partial class AddNoteView : ContentPage
                 ? "editor_remove_button_activated.png"
                 : "editor_remove_button_activated_dark.png";
         }
-        
+
         RemoveButton.Source = icon;
     }
 }

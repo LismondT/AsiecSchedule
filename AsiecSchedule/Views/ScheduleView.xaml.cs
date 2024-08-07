@@ -51,24 +51,50 @@ public partial class ScheduleView : ContentPage
     
     private async void ScheduleCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        ((CollectionView)sender).SelectedItem = null;
+
         if (!_addNoteMode)
         {
-            ((CollectionView)sender).SelectedItem = 0;
             return;
         }
 
         if (e.CurrentSelection[0] is not LessonModel lesson)
             return;
 
+        SetAddNoteMode(false);
         await Navigation.PushModalAsync(new AddNoteView(lesson));
-
-        ((CollectionView)sender).SelectedItem = 0;
-        _addNoteMode = false;
     }
 
 
     private void AddNoteToolbarItem_Clicked(object sender, EventArgs e)
     {
-        _addNoteMode = true;
+        SetAddNoteMode(!_addNoteMode);
+    }
+
+
+    private void SetAddNoteMode(bool mode)
+    {
+        string icon;
+
+        _addNoteMode = mode;
+
+        Title = mode == false
+            ? "Расписание"
+            : "Выберите пару";
+
+        if (mode)
+        {
+            icon = Application.Current?.RequestedTheme == AppTheme.Light
+                ? "editor_remove_button_activated.png"
+                : "editor_remove_button_activated_dark.png";
+        }
+        else
+        {
+            icon = Application.Current?.RequestedTheme == AppTheme.Light
+                ? "add_note_toolbar_icon.png"
+                : "add_note_toolbar_icon_dark.png";
+        }
+
+        AddNoteToolbarItem.IconImageSource = icon;
     }
 }
