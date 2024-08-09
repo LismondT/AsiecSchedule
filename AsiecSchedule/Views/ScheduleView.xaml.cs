@@ -23,28 +23,6 @@ public partial class ScheduleView : ContentPage
         base.OnAppearing();
 
         ScheduleCollection.ItemsSource = AppGlobals.Days;
-
-        await AppUpdater.Init();
-
-        if (AppSettings.WasUpdated)
-            AppUpdater.FreeTempResources();
-
-        if (!AppUpdater.IsLatestVersion())
-        {
-            bool toUpdate = await DisplayAlert("Доступна новая версия",
-                $"Текущая версия: {AppUpdater.GetCurrentVersion()}\n" +
-                $"Последняя версия: {AppUpdater.GetLatestVersion()}",
-                "Обновить", "Не обновлять");
-
-            if (toUpdate)
-            {
-                await AppUpdater.Update();
-            }
-        }
-        else
-        {
-            await DisplayAlert("Последняя версия", "Установленна последняя версия", "ок");
-        }
     }
 
 
@@ -109,22 +87,13 @@ public partial class ScheduleView : ContentPage
 
         _addNoteMode = mode;
 
-        Title = mode == false
-            ? "Расписание"
-            : "Выберите пару";
+        Title = mode
+            ? "Выберите пару"
+            : "Расписание";
 
-        if (mode)
-        {
-            icon = Application.Current?.RequestedTheme == AppTheme.Light
-                ? "editor_remove_button_activated.png"
-                : "editor_remove_button_activated_dark.png";
-        }
-        else
-        {
-            icon = Application.Current?.RequestedTheme == AppTheme.Light
-                ? "add_note_toolbar_icon.png"
-                : "add_note_toolbar_icon_dark.png";
-        }
+        icon = mode
+            ? "editor_remove_button_activated_dark.png"
+            : "add_note_toolbar_icon_dark.png";
 
         AddNoteToolbarItem.IconImageSource = icon;
     }

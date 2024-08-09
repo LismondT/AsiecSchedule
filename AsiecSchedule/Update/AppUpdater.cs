@@ -4,25 +4,33 @@ namespace AsiecSchedule.Update
 {
     public static class AppUpdater
     {
+        public static string TempFilePath { get; }
         private static readonly IUpdater? _updater;
         private static readonly GitHubClient _gitHubClient;
         private static Release? _latestRelease;
 
         static AppUpdater()
         {
-#if ANDROID
-            _updater = new AndroidUpdater();
-#elif WINDOWS
-            _updater = new WindowsUpdater();
-#endif
-
             _gitHubClient = new GitHubClient(new ProductHeaderValue("AsiecSchedule"));
+
+#if ANDROID
+
+            _updater = new AndroidUpdater();
+            TempFilePath = Path.Combine(Android.App.Application.Context.GetExternalFilesDir("").AbsolutePath, "com.lismondt.asiecshcedule.apk");
+
+#elif WINDOWS //TODO: Windows update
+            
+            _updater = new WindowsUpdater();
+
+#endif
         }
 
         public static async Task Init()
         {
             _latestRelease = await GetLatestRelease();
         }
+
+        public static bool CheckPremissions() => _updater?.CheckPermissions() ?? throw new InvalidOperationException();
 
         public static string GetCurrentVersion() => AppInfo.Current.VersionString;
 
@@ -47,12 +55,12 @@ namespace AsiecSchedule.Update
             return url;
         }
 
-        public static async Task Update()
+        public static void Update()
         {
             if (_updater == null)
                 throw new Exception();
 
-            await _updater.Update(GetLatestVersionDownloadUrl());
+            _updater.Update(TempFilePath);
         }
 
         public static void FreeTempResources()
@@ -60,7 +68,7 @@ namespace AsiecSchedule.Update
             if (_updater == null)
                 throw new Exception();
 
-            _updater.FreeTempResources();
+            _updater.FreeTempResources(TempFilePath);
         }
     }
 }

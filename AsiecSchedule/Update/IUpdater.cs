@@ -2,8 +2,8 @@
 {
     public interface IUpdater
     {
-        public Task Update(string version);
-
-        public void FreeTempResources();
+        public bool CheckPermissions();
+        public void Update(string sourcePath);
+        public void FreeTempResources(string sourcePath);
     }
 }

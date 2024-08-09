@@ -1,14 +1,25 @@
 ﻿
+
 namespace AsiecSchedule.Update
 {
     internal class WindowsUpdater : IUpdater
     {
-        Task IUpdater.Update(string version)
+        public bool CheckPermissions()
         {
             throw new NotImplementedException();
         }
-        
-        public void FreeTempResources()
+
+        public Task<bool> DownloadSource(string url, string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FreeTempResources(string sourcePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(string sourcePath)
         {
             throw new NotImplementedException();
         }

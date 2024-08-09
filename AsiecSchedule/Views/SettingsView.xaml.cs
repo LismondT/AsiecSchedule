@@ -57,7 +57,7 @@ public partial class SettingsView : ContentPage
 			: "выключить";
 
 		//Version Label
-		VersionLabel.Text = AppUpdater.GetCurrentVersion();
+		VersionLabel.Text = $"Версия: v{AppUpdater.GetCurrentVersion()}";
     }
 
 
@@ -96,6 +96,11 @@ public partial class SettingsView : ContentPage
         RequestIDPicker.ItemsSource = AsiecData.GetIDDict(AppSettings.RequestType).Keys.ToArray();
         ChooseRequestIDText.Text = _typeToRequestIDLabelText[AppSettings.RequestType];
     }
+
+	private void OnCheckUpdatesButton_Clicked(object sender, EventArgs e)
+	{
+		AppGlobals.CheckUpdates?.Invoke();
+	}
 
     private void IsDebugPicker_SelectedIndexChanged(object sender, EventArgs e)
     {
