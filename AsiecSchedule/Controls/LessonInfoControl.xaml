@@ -22,4 +22,20 @@
 
     </Frame>
 
+    <ContentView.Resources>
+
+        <ResourceDictionary>
+
+            <Style TargetType="Label">
+                
+                <Setter Property="TextColor"
+                        Value="{AppThemeBinding Light={StaticResource Black},
+                                                 Dark={StaticResource PrimaryDarkText}}" />
+                
+            </Style>
+            
+        </ResourceDictionary>
+        
+    </ContentView.Resources>
+
 </ContentView>

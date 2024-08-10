@@ -9,40 +9,32 @@ namespace AsiecSchedule.Data
             public const string RequestID = "RequestID";
             public const string RequestType = "RequestType";
             public const string WasUpdated = "WasUpdated";
-            public const string TempFile = "TempFile";
+            public const string IsNotifyAboutUpdate = "IsNotifyAboutUpdate";
         }
 
-        private static string? _requestID;
+        private static string _requestID;
         private static RequestType _requestType;
         private static bool _wasUpdated;
-        private static string _tempFile;
+        private static bool _isNotifyAboutUpdate;
 
         static AppSettings()
         {
-            _wasUpdated = Preferences.Get(Keys.WasUpdated, false);
-            _tempFile = Preferences.Get(Keys.TempFile, string.Empty);
+            try { _requestID = Preferences.Get(Keys.RequestID, string.Empty); }
+            catch { _requestID = string.Empty; }
+
+            try { _requestType = (RequestType)Preferences.Get(Keys.RequestType, (int)RequestType.None); }
+            catch { _requestType = RequestType.None; }
+
+            try { _wasUpdated = Preferences.Get(Keys.WasUpdated, false); }
+            catch { _wasUpdated = false; }
+            
+            try { _isNotifyAboutUpdate = Preferences.Get(Keys.IsNotifyAboutUpdate, true); }
+            catch { _isNotifyAboutUpdate = true; }
         }
 
         public static string RequestID
         {
-            get
-            {
-
-                if (_requestID == null)
-                {
-                    string tmp = string.Empty;
-                    
-                    try
-                    {
-                        tmp = Preferences.Get(Keys.RequestID, string.Empty);
-                    }
-                    catch { }
-
-                    _requestID = tmp;
-                }
-
-                return _requestID;
-            }
+            get => _requestID;
 
             set
             {
@@ -53,23 +45,7 @@ namespace AsiecSchedule.Data
 
         public static RequestType RequestType
         {
-            get
-            {
-                if (_requestType == RequestType.None)
-                {
-                    RequestType tmp = RequestType.None;
-
-                    try
-                    {
-                        tmp = (RequestType)Preferences.Get(Keys.RequestType, (int)RequestType.None);
-                    }
-                    catch { }
-
-                    _requestType = tmp;
-                }
-
-                return _requestType;
-            }
+            get => _requestType;
 
             set
             {
@@ -77,7 +53,7 @@ namespace AsiecSchedule.Data
                 Preferences.Set(Keys.RequestType, (int)_requestType);
             }
         }
-        
+
         public static bool WasUpdated
         {
             get => _wasUpdated;
@@ -89,19 +65,17 @@ namespace AsiecSchedule.Data
             }
         }
 
-        public static string TempFile
+        public static bool IsNotifyAboutUpdate
         {
-            get => _tempFile;
+            get => _isNotifyAboutUpdate;
 
             set
             {
-                Preferences.Set(Keys.TempFile, value);
-                _tempFile = value;
+                Preferences.Set(Keys.IsNotifyAboutUpdate, value);
+                _isNotifyAboutUpdate = value;
             }
         }
 
         public static bool IsDebug { get; set; } = true;
-
-        public static string NotesPath => Path.Combine(FileSystem.CacheDirectory, "notes");
     }
 }

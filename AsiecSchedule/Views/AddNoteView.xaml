@@ -6,7 +6,7 @@
              x:Class="AsiecSchedule.Views.AddNoteView"
              Title="AddNoteView">
     
-    <Grid>
+    <Grid MaximumWidthRequest="600">
 
         <Grid.RowDefinitions>
 
@@ -57,7 +57,7 @@
 
                             <Border Padding="5"
                                     HeightRequest="32"
-                                    >
+                                    Style="{StaticResource FileBorder}">
 
                                 <Label Text="{Binding .}" />
 
@@ -135,17 +135,21 @@
             <Grid RowDefinitions="auto,auto"
                   ColumnDefinitions="auto,auto">
 
-                <Label Text="Заметка на следующую пару"
+                <Label Text="Заметка на следующую пару "
                        Style="{StaticResource NoteSettingLabel}" />
                 
-                <Label Grid.Row="1"
-                       Text="Учитывать самостоятельную нагрузку"
-                       Style="{StaticResource NoteSettingLabel}" />
+                <Label x:Name="IsConsiderIndependentLoadLabel"
+                       Text="Учитывать самостоятельную нагрузку "
+                       IsVisible="False"
+                       Style="{StaticResource NoteSettingLabel}"
+                       Grid.Row="1" />
 
                 <CheckBox x:Name="IsForNextLessonCheckBox"
+                          CheckedChanged="IsForNextLessonCheckBox_CheckedChanged"
                           Grid.Column="1" />
 
                 <CheckBox x:Name="IsConsiderIndependentLoadCheckBox"
+                          IsVisible="False"
                           Grid.Row="1"
                           Grid.Column="1" />
 
@@ -153,17 +157,17 @@
             
         </Frame>
 
-        <Button Grid.Row="3"
-                Grid.Column="1"
-                Text="Сохранить"
+        <Button Text="Сохранить"
                 Clicked="SaveButton_Clicked"
-                Style="{StaticResource AddNoteButton}" />
+                Style="{StaticResource AddNoteButton}"
+                Grid.Row="3"
+                Grid.Column="1" />
 
-        <Button Grid.Row="3"
-                Grid.Column="0"
-                Text="Отмена"
+        <Button Text="Отмена"
                 Clicked="CancelButton_Clicked"
-                Style="{StaticResource AddNoteButton}" />
+                Style="{StaticResource AddNoteButton}"
+                Grid.Row="3"
+                Grid.Column="0" />
 
     </Grid>
 

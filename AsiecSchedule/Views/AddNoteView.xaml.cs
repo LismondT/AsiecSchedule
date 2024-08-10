@@ -209,7 +209,7 @@ public partial class AddNoteView : ContentPage
         }
         else
         {
-            await Launcher.Default.OpenAsync(new OpenFileRequest("Выберете приложение", new ReadOnlyFile(targetFilepath)));
+            await Launcher.Default.OpenAsync(new OpenFileRequest("Выберите приложение", new ReadOnlyFile(targetFilepath)));
         }
     }
 
@@ -239,6 +239,13 @@ public partial class AddNoteView : ContentPage
         }
     }
 
+    
+    private void IsForNextLessonCheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        IsConsiderIndependentLoadLabel.IsVisible = e.Value;
+        IsConsiderIndependentLoadCheckBox.IsVisible = e.Value;
+    }
+    
 
     private void SetRemoveState(bool isRemoveMode)
     {

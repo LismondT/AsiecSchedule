@@ -5,12 +5,34 @@
              x:Class="AsiecSchedule.Views.AllNotesView"
              Title="Заметки">
 
-    <Grid RowDefinitions="*">
+    <Grid RowDefinitions="*"
+          MaximumWidthRequest="600">
 
         <CollectionView x:Name="NotesCollection"
+                        IsGrouped="True"
                         SelectionMode="Single"
                         SelectionChanged="NotesCollection_SelectionChanged">
 
+            <CollectionView.ItemsLayout>
+
+                <LinearItemsLayout Orientation="Vertical"
+                                   ItemSpacing="5" />
+
+            </CollectionView.ItemsLayout>                
+
+            <CollectionView.GroupHeaderTemplate>
+
+                <DataTemplate>
+
+                    <Label Text="{Binding Name}"
+                           HorizontalOptions="Center"
+                           FontSize="Medium"
+                           Margin="0, 0, 5, 0"/>
+
+                </DataTemplate>
+                
+            </CollectionView.GroupHeaderTemplate>
+            
             <CollectionView.ItemTemplate>
 
                 <DataTemplate x:DataType="models:NoteModel">
@@ -19,20 +41,26 @@
 
                         <Grid RowDefinitions="auto, auto, auto">
 
-                            <Frame Style="{StaticResource AccentFrame}">
+                            <Label Text="{Binding Lesson.NameTitle}"
+                                   MaxLines="1" />
 
-                                <Label Style="{StaticResource AccentLabel}" 
-                                       Text="{Binding Lesson.Date}" />
-
-                            </Frame>
-
-                            <Label Text="{Binding ID}"
+                            <Label Text="{Binding Lesson.TeacherTitle}"
+                                   MaxLines="1"
+                                   LineBreakMode="TailTruncation"
                                    Grid.Row="1" />
 
-                            <Label Text="{Binding Text}"
-                                   MaxLines="3"
-                                   LineBreakMode="TailTruncation"
-                                   Grid.Row="2" />
+                            <Border BackgroundColor="{StaticResource Gray500}"
+                                    Stroke="Transparent"
+                                    StrokeShape="RoundRectangle 15"
+                                    Padding="10"
+                                    Margin="0, 10, 0, 0"
+                                    Grid.Row="2">
+
+                                <Label Text="{Binding Text}"
+                                       MaxLines="3"
+                                       LineBreakMode="TailTruncation" />
+
+                            </Border>
 
                         </Grid>
                         
@@ -52,10 +80,18 @@
 
             <Style TargetType="Border" x:Key="CollectionBorder">
 
-                <Setter Property="Margin" Value="0, 0, 0, 5" />
-                <Setter Property="Padding" Value="20" />
-                <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
+                <Setter Property="Margin" Value="5, 0, 5, 0" />
+                <Setter Property="Padding" Value="20, 15, 20, 10" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 15" />
+
+                <Setter Property="Stroke"
+                        Value="{AppThemeBinding Light={StaticResource Gray100},
+                                                 Dark={StaticResource Gray600}}" />
+                
+                <Setter Property="BackgroundColor"
+                        Value="{AppThemeBinding Light={StaticResource Gray100},
+                                                 Dark={StaticResource Gray600}}" />
+                
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">

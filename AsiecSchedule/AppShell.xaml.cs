@@ -22,10 +22,11 @@ namespace AsiecSchedule
             base.OnAppearing();
 
             UpdateRequestIDLabel();
-
+            
             await AppUpdater.Init();
 
-            CheckUpdates();
+            if (AppSettings.IsNotifyAboutUpdate)
+                CheckUpdates();
         }
 
         private void UpdateRequestIDLabel()
@@ -41,8 +42,11 @@ namespace AsiecSchedule
             {
                 bool toUpdate = await DisplayAlert("Доступна новая версия",
                     $"Текущая версия: v{AppUpdater.GetCurrentVersion()}\n" +
-                    $"Последняя версия: {AppUpdater.GetLatestVersion()}",
-                    "обновить", "не обновлять");
+                    $"Последняя версия: {AppUpdater.GetLatestVersion()}\n\n" +
+                    $"О новой версии:\n" +
+                    AppUpdater.AboutUpdate +
+                    "\n\nВы можете обновить приложение в настройках позже",
+                    "обновить", "обновить позже");
 
                 if (toUpdate)
                 {
@@ -50,10 +54,6 @@ namespace AsiecSchedule
                     {
                         OnPermissionsSuccess();
                     }
-                }
-                else
-                {
-                    await DisplayAlert(";P", "Вы можете обновить приложение в настройках позже", "ок");
                 }
             }
         }

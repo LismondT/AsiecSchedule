@@ -14,7 +14,7 @@
 
     </ContentPage.ToolbarItems>
     
-    <Grid VerticalOptions="Fill">
+    <Grid>
 
         <Grid.RowDefinitions>
     
@@ -25,13 +25,20 @@
         </Grid.RowDefinitions>
 
         <CollectionView x:Name="ScheduleCollection"
-                        Margin="10, 0, 10, 0"
                         MaximumWidthRequest="600"
                         VerticalScrollBarVisibility="Never"
                         IsGrouped="True"
                         SelectionMode="Single"
                         SelectionChanged="ScheduleCollection_SelectionChanged">
 
+            <CollectionView.ItemsLayout>
+
+                <LinearItemsLayout Orientation="Vertical"
+                                   ItemSpacing="{OnPlatform WinUI=2,
+                                                          Android=5}"/>
+
+            </CollectionView.ItemsLayout>
+            
             <CollectionView.GroupHeaderTemplate>
                 
                 <DataTemplate>
@@ -102,32 +109,55 @@
             <Style TargetType="Border" x:Key="CollectionHeaderBorder">
 
                 <Setter Property="Padding" Value="20, 10" />
-                <Setter Property="Margin" Value="0, 10, 0, 5" />
-                <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
-                <Setter Property="StrokeShape" Value="RoundRectangle 40,0,0,40" />
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                <Setter Property="Margin" Value="0, 5, 0, 0" />
+                
+                <Setter Property="Stroke"
+                        Value="{AppThemeBinding Light={StaticResource Primary},
+                                                 Dark={StaticResource PrimaryDark}}" />
+                
+                <Setter Property="StrokeShape"
+                        Value="{OnPlatform Android=RoundRectangle 40 0 0 40,
+                                             WinUI=RoundRectangle 50 50 0 0}" />
+                
+                <Setter Property="BackgroundColor"
+                        Value="{AppThemeBinding Light={StaticResource Primary},
+                                                 Dark={StaticResource PrimaryDark}}" />
 
             </Style>
 
             <Style TargetType="Border" x:Key="CollectionItemBorder">
 
-                <Setter Property="Margin" Value="0, 0, 0, 5" />
+                <!--<Setter Property="Margin" Value="0, 0, 0, 5" />-->
                 <Setter Property="Padding" Value="20" />
-                <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
-                <Setter Property="StrokeShape" Value="RoundRectangle 0,20,20,0" />
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
+                
+                <Setter Property="Stroke"
+                        Value="{AppThemeBinding Light={StaticResource Gray100},
+                                                 Dark={StaticResource Gray600}}" />
+                
+                <Setter Property="StrokeShape"
+                        Value="{OnPlatform Android=RoundRectangle 0 20 20 0,
+                                             WinUI=RoundRectangle 10 10 50 50}" />
+                
+                <Setter Property="BackgroundColor"
+                        Value="{AppThemeBinding Light={StaticResource Gray100},
+                                                 Dark={StaticResource Gray600}}" />
+                
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
                             <VisualState x:Name="Normal" />
                             <VisualState x:Name="Selected">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
+                                    <Setter Property="BackgroundColor"
+                                            Value="{OnPlatform Android={AppThemeBinding Light={StaticResource Gray100},
+                                                                                         Dark={StaticResource Gray600}},
+                                                                 WinUI=Transparent}" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
                     </VisualStateGroupList>
                 </Setter>
+            
             </Style>
             
         </ResourceDictionary>

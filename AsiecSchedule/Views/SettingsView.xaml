@@ -4,7 +4,8 @@
              x:Class="AsiecSchedule.Views.SettingsView"
              Title="Настройки">
 
-    <Grid RowDefinitions="auto, auto, auto, auto, *, auto">
+    <Grid RowDefinitions="auto, auto, auto, auto, auto, *, auto"
+          MaximumWidthRequest="600">
 
         <Frame Style="{StaticResource SettingFrame}">
 
@@ -46,9 +47,24 @@
                 Clicked="OnCheckUpdatesButton_Clicked"
                 Grid.Row="2" />
 
-
         <Frame Style="{StaticResource SettingFrame}"
                Grid.Row="3">
+
+            <Grid ColumnDefinitions="{StaticResource SettingColumnDefinition}">
+
+                <Label Text="Уведомлять об обновлениях"
+                       VerticalOptions="Center" />
+
+                <CheckBox x:Name="NotifyAboutUpdateCheckBox"
+                          CheckedChanged="IsNotifyAboutUpdateCheckBox_CheckedChanged"
+                          Grid.Column="1" />
+
+            </Grid>
+            
+        </Frame>
+
+        <Frame Style="{StaticResource SettingFrame}"
+               Grid.Row="4">
             
             <Grid ColumnDefinitions="{StaticResource SettingColumnDefinition}">
                 
@@ -71,12 +87,11 @@
 
         </Frame>
 
-
         <Label x:Name="VersionLabel"
                Margin="0, 0, 0, 5"
                HorizontalOptions="Center"
                VerticalOptions="Center"
-               Grid.Row="5" />
+               Grid.Row="6" />
 
     </Grid>
 
@@ -87,7 +102,7 @@
             <Style TargetType="Frame" x:Key="SettingFrame">
 
                 <Setter Property="Margin" Value="10, 10, 10, 0" />
-                <Setter Property="Padding" Value="20, 10" />
+                <Setter Property="Padding" Value="20, 5" />
 
             </Style>
 

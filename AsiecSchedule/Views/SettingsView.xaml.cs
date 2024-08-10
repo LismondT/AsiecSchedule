@@ -51,6 +51,9 @@ public partial class SettingsView : ContentPage
 			RequestIDSettingFrame.IsVisible = false;
 		}
 
+		//NotifyAboutUpdateCheckBox
+		NotifyAboutUpdateCheckBox.IsChecked = AppSettings.IsNotifyAboutUpdate;
+
 		//Debug
 		IsDebugPicker.Title = AppSettings.IsDebug
 			? "включить"
@@ -72,6 +75,7 @@ public partial class SettingsView : ContentPage
 			AppSettings.RequestType = _itemToRequestType[item];
 		}
 
+		RequestIDSettingFrame.IsVisible = true;
 		UpdateRequestIDSetting();
     }
 
@@ -110,9 +114,12 @@ public partial class SettingsView : ContentPage
         if (selectedIndex != -1)
         {
             string item = picker.Items[selectedIndex];
-            AppSettings.IsDebug = item == "включить"
-				? true
-				: false;
+            AppSettings.IsDebug = item == "включить";
         }
+    }
+
+    private void IsNotifyAboutUpdateCheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+		AppSettings.IsNotifyAboutUpdate = e.Value;
     }
 }

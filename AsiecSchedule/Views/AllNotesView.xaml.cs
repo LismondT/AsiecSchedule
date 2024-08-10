@@ -1,5 +1,6 @@
 using AsiecSchedule.Data;
 using AsiecSchedule.Models;
+using AsiecSchedule.ViewModels;
 
 namespace AsiecSchedule.Views;
 
@@ -8,9 +9,16 @@ public partial class AllNotesView : ContentPage
 	public AllNotesView()
 	{
 		InitializeComponent();
-
-		NotesCollection.ItemsSource = AppGlobals.Notes;
 	}
+
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        NotesCollection.ItemsSource = GetNotesGroups();
+    }
+
 
     private async void NotesCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -22,5 +30,16 @@ public partial class AllNotesView : ContentPage
         await Navigation.PushModalAsync(new NoteView(note));
 
         ((CollectionView)sender).SelectedItem = 0;
+    }
+
+
+    private List<NotesGroup> GetNotesGroups()
+    {
+        List<NotesGroup> notesGroups = [.. AppGlobals.Notes
+            .GroupBy(note => note.Lesson?.Date.Date) // Группируем по дате
+            .Select(group => new NotesGroup($"{group.Key:M}, {group.Key:dddd}" ?? "Unknown", [.. group])) // Создаём NotesGroup
+            .OrderBy(group => group.Name)];
+
+        return notesGroups;
     }
 }

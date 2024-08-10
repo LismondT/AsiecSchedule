@@ -21,7 +21,7 @@ namespace AsiecSchedule.Utils
 
         public static ObservableCollection<NoteModel> GetNotes()
         {
-            string foldersPath = AppSettings.NotesPath;
+            string foldersPath = AppGlobals.NotesPath;
 
             if (!Directory.Exists(foldersPath)) return [];
 
@@ -73,7 +73,7 @@ namespace AsiecSchedule.Utils
 
         public static string GetNoteFolderPath(NoteModel note)
         {
-            string folderPath = AppSettings.NotesPath + $"/{note.ID}/";
+            string folderPath = AppGlobals.NotesPath + $"/{note.ID}/";
 
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);

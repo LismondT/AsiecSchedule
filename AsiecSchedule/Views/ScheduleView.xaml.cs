@@ -1,7 +1,6 @@
 using AsiecSchedule.Data;
 using AsiecSchedule.Data.Asiec;
 using AsiecSchedule.Models;
-using AsiecSchedule.Update;
 using AsiecSchedule.Utils;
 using AsiecSchedule.ViewModels;
 
@@ -11,14 +10,14 @@ public partial class ScheduleView : ContentPage
 {
     private bool _addNoteMode = false;
 
-    
+
     public ScheduleView()
     {
         InitializeComponent();
     }
 
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
 
@@ -41,12 +40,12 @@ public partial class ScheduleView : ContentPage
             return;
         }
 
-        
+
 
         //Schedule schedule = await AsiecParser.GetSchedule(requestId, requestType, firstDate, lastDate);
 
         //LoadSchedule(schedule);
-        
+
         //Debug
         List<DayModel> days = DebugUtils.GetFilledDays();
 
@@ -57,7 +56,7 @@ public partial class ScheduleView : ContentPage
         ScheduleCollection.ItemsSource = daysViewModel.Days;
     }
 
-    
+
     private async void ScheduleCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         ((CollectionView)sender).SelectedItem = null;
@@ -71,7 +70,14 @@ public partial class ScheduleView : ContentPage
             return;
 
         SetAddNoteMode(false);
-        await Navigation.PushModalAsync(new AddNoteView(lesson));
+        if (AppGlobals.Notes.Where(x => x.Lesson == lesson).Count() == 0)
+        {
+            await Navigation.PushModalAsync(new AddNoteView(lesson));
+        }
+        else
+        {
+            await DisplayAlert("-_-", "На эту пару уже есть заметка", "ок");
+        }
     }
 
 

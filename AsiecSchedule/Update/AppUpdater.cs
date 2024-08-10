@@ -5,6 +5,7 @@ namespace AsiecSchedule.Update
     public static class AppUpdater
     {
         public static string TempFilePath { get; }
+        public static string? AboutUpdate { get; private set; }
         private static readonly IUpdater? _updater;
         private static readonly GitHubClient _gitHubClient;
         private static Release? _latestRelease;
@@ -12,6 +13,7 @@ namespace AsiecSchedule.Update
         static AppUpdater()
         {
             _gitHubClient = new GitHubClient(new ProductHeaderValue("AsiecSchedule"));
+            AboutUpdate = null;
 
 #if ANDROID
 
@@ -21,18 +23,28 @@ namespace AsiecSchedule.Update
 #elif WINDOWS //TODO: Windows update
             
             _updater = new WindowsUpdater();
-
+            TempFilePath = "";
 #endif
         }
 
         public static async Task Init()
         {
             _latestRelease = await GetLatestRelease();
+            AboutUpdate = _latestRelease.Body;
         }
 
         public static bool CheckPremissions() => _updater?.CheckPermissions() ?? throw new InvalidOperationException();
 
-        public static string GetCurrentVersion() => AppInfo.Current.VersionString;
+        public static string GetCurrentVersion()
+        {
+            string version = AppInfo.Current.VersionString;
+
+#if WINDOWS
+            version = string.Join('.', version.Split('.')[.. 3]);
+#endif
+
+            return version;
+        }
 
         public static string GetLatestVersion() => _latestRelease?.TagName ?? throw new Exception();
 

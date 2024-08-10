@@ -17,5 +17,6 @@ namespace AsiecSchedule.Data
         public static DayModel CurrentDay { get; set; } = Days[0];
 
         public static ObservableCollection<NoteModel> Notes { get; set; } = [];
+        public static string NotesPath => Path.Combine(FileSystem.CacheDirectory, "notes");
     }
 }
