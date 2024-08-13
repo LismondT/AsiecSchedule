@@ -28,31 +28,31 @@ namespace AsiecSchedule.Models
         public TimeSpan Duration => EndTime - StartTime;
         public bool HasNote { get => hasNote; set => hasNote = value; }
 
-        public string Preview => $"{Number}. ({StartTime:hh\\:mm}-{EndTime:hh\\:mm})";
-        public string? NameTitle => $"Предмет: {Name}";
-        public string? GroupTitle => $"Группа: {Group}";
-        public string? TeacherTitle => $"Преподаватель: {Teacher}";
-        public string? ClassroomTitle => $"Аудитория: {Classroom}";
-        public string Location => $"{ClassroomTitle} | {Territory}";
-        public string DateTitle => $"{Date:M}, {Date:dddd}";
-        public string DurationTitle => $"Длительность: {Duration}";
+        //public string Preview => $"{Number}. ({StartTime:hh\\:mm}-{EndTime:hh\\:mm})";
+        //public string? NameTitle => $"Предмет: {Name}";
+        //public string? GroupTitle => $"Группа: {Group}";
+        //public string? TeacherTitle => $"Преподаватель: {Teacher}";
+        //public string? ClassroomTitle => $"Аудитория: {Classroom}";
+        //public string Location => $"{ClassroomTitle} | {Territory}";
+        //public string DateTitle => $"{Date:M}, {Date:dddd}";
+        //public string DurationTitle => $"Длительность: {Duration}";
 
-        public string? PrimaryInformation => AppSettings.RequestType switch
-        {
-            RequestType.GroupId => TeacherTitle,
-            RequestType.TeacherId => GroupTitle,
-            RequestType.ClassroomId => TeacherTitle,
-            RequestType.None => string.Empty,
-            _ => string.Empty
-        };
+        //public string? PrimaryInformation => AppSettings.RequestType switch
+        //{
+        //    RequestType.GroupId => TeacherTitle,
+        //    RequestType.TeacherId => GroupTitle,
+        //    RequestType.ClassroomId => TeacherTitle,
+        //    RequestType.None => string.Empty,
+        //    _ => string.Empty
+        //};
 
-        public string? SecondaryInformation => AppSettings.RequestType switch
-        {
-            RequestType.GroupId => Location,
-            RequestType.TeacherId => Location,
-            RequestType.ClassroomId => GroupTitle,
-            RequestType.None => string.Empty,
-            _ => string.Empty
-        };
+        //public string? SecondaryInformation => AppSettings.RequestType switch
+        //{
+        //    RequestType.GroupId => Location,
+        //    RequestType.TeacherId => Location,
+        //    RequestType.ClassroomId => GroupTitle,
+        //    RequestType.None => string.Empty,
+        //    _ => string.Empty
+        //};
     }
 }

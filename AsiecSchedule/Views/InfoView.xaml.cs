@@ -1,5 +1,6 @@
 using AsiecSchedule.Data;
 using AsiecSchedule.Models;
+using AsiecSchedule.ViewModels;
 
 namespace AsiecSchedule.Views;
 
@@ -68,13 +69,13 @@ public partial class InfoView : ContentPage
     {
         base.OnAppearing();
 
-        (State, LessonModel?) state = GetState(DateTime.Now.TimeOfDay, AppGlobals.CurrentDay);
+        (State, LessonViewModel?) state = GetState(DateTime.Now.TimeOfDay, AppGlobals.CurrentDay);
         DisplayCurrentState(state.Item2, state.Item1);
 
         if (_currentStateEndTime != null)
         {
             TimeSpan nextTargetTime = _currentStateEndTime.Value.Add(new TimeSpan(0, 1, 0));
-            (State, LessonModel?) nextState = GetState(nextTargetTime, AppGlobals.CurrentDay);
+            (State, LessonViewModel?) nextState = GetState(nextTargetTime, AppGlobals.CurrentDay);
             DisplayNextState(nextState.Item2, nextState.Item1);
         }
         else
@@ -112,7 +113,7 @@ public partial class InfoView : ContentPage
     }
 
     
-    private static (State, LessonModel?) GetState(TimeSpan targetTime, DayModel? day)
+    private static (State, LessonViewModel?) GetState(TimeSpan targetTime, DayViewModel? day)
     {
         if (day == null || day.Count == 0) return (State.Weekend, null);
 
@@ -121,7 +122,7 @@ public partial class InfoView : ContentPage
 
         for (int i = 0; i < day.Count; i++)
         {
-            LessonModel lesson = day[i];
+            LessonViewModel lesson = day[i];
             TimeSpan startTime = lesson.StartTime;
             TimeSpan endTime = lesson.EndTime;
 
@@ -146,7 +147,7 @@ public partial class InfoView : ContentPage
     }
 
     
-    private void DisplayCurrentState(LessonModel? lesson, State state)
+    private void DisplayCurrentState(LessonViewModel? lesson, State state)
     {
         string title = _currentStateToText[state];
         CurrentStateTitle.Text = title;
@@ -194,7 +195,7 @@ public partial class InfoView : ContentPage
     }
 
     
-    private void DisplayNextState(LessonModel? lesson, State state)
+    private void DisplayNextState(LessonViewModel? lesson, State state)
     {
         string title = _nextStateToText[state];
         
@@ -211,7 +212,7 @@ public partial class InfoView : ContentPage
 
         if (state == State.Recess)
         {
-            LessonModel? currentLesson = GetState(DateTime.Now.TimeOfDay, AppGlobals.CurrentDay).Item2;
+            LessonViewModel? currentLesson = GetState(DateTime.Now.TimeOfDay, AppGlobals.CurrentDay).Item2;
             TimeSpan? recessTime = lesson?.StartTime - currentLesson?.EndTime;
 
             title += $" ({recessTime:mm} минут)";
@@ -247,13 +248,13 @@ public partial class InfoView : ContentPage
         if (!AppSettings.IsDebug) return;
 
         TimeSpan targetTime = DebugTimePicker.Time;
-        (State, LessonModel?) state = GetState(targetTime, AppGlobals.CurrentDay);
+        (State, LessonViewModel?) state = GetState(targetTime, AppGlobals.CurrentDay);
         DisplayCurrentState(state.Item2, state.Item1);
 
         if (_currentStateEndTime != null)
         {
             TimeSpan nextTargetTime = _currentStateEndTime.Value.Add(new TimeSpan(0, 1, 0));
-            (State, LessonModel?) nextState = GetState(nextTargetTime, AppGlobals.CurrentDay);
+            (State, LessonViewModel?) nextState = GetState(nextTargetTime, AppGlobals.CurrentDay);
             DisplayNextState(nextState.Item2, nextState.Item1);
         }
         else

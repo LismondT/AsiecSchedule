@@ -4,6 +4,6 @@
     {
         public DateTime Date { get; set; } = date;
 
-        public string Name => $"{Date:M}, {Date:dddd}";
+        //public string Name => $"{Date:M}, {Date:dddd}";
     }
 }

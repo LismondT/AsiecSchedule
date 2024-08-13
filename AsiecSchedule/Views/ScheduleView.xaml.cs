@@ -57,11 +57,12 @@ public partial class ScheduleView : ContentPage
             return;
         }
 
-        if (e.CurrentSelection[0] is not LessonModel lesson)
+        if (e.CurrentSelection[0] is not LessonViewModel lesson)
             return;
 
         SetAddNoteMode(false);
-        if (AppGlobals.Notes.Count(x => x.Lesson == lesson) == 0)
+        if (AppGlobals.Notes.Count(x => x.Lesson?.Name == lesson.Name &&
+                                        x.Lesson?.Date == lesson.Date) == 0)
         {
             await Navigation.PushModalAsync(new AddNoteView(lesson));
         }

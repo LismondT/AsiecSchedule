@@ -1,6 +1,7 @@
 using AsiecSchedule.Data;
 using AsiecSchedule.Models;
 using AsiecSchedule.Utils;
+using AsiecSchedule.ViewModels;
 using System.Collections.ObjectModel;
 
 namespace AsiecSchedule.Views;
@@ -8,7 +9,7 @@ namespace AsiecSchedule.Views;
 public partial class AddNoteView : ContentPage
 {
     private bool _isToRemove = false;
-    private readonly LessonModel _lesson;
+    private readonly LessonViewModel _lesson;
     private readonly string _id;
 
     private readonly List<Stream> _streams;
@@ -21,7 +22,7 @@ public partial class AddNoteView : ContentPage
     private readonly Dictionary<ImageSource, string> _imageSourceToPath;
 
     
-    public AddNoteView(LessonModel model)
+    public AddNoteView(LessonViewModel model)
     {
         InitializeComponent();
 
@@ -75,6 +76,11 @@ public partial class AddNoteView : ContentPage
     
     private async void SaveButton_Clicked(object sender, EventArgs e)
     {
+        if (IsForNextLessonCheckBox.IsChecked == false)
+        {
+            _lesson.HasNote = true;
+        }
+
         NoteModel model = new()
         {
             ID = _id,

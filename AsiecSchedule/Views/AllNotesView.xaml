@@ -55,6 +55,7 @@
                                     StrokeShape="RoundRectangle 15"
                                     Padding="10"
                                     Margin="0, 10, 0, 0"
+                                    IsVisible="{Binding Text.Length, Converter={StaticResource IntToBool}}"
                                     Grid.Row="2">
 
                                 <Label Text="{Binding Text}"
@@ -76,6 +77,8 @@
     </Grid>
 
     <ContentPage.Resources>
+
+        <converters:IntToBoolConverter x:Key="IntToBool" />
 
         <ResourceDictionary>
 

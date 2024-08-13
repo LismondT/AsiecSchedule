@@ -1,8 +1,11 @@
 ﻿using AsiecSchedule.Data;
+using AsiecSchedule.Models;
 using AsiecSchedule.Popups;
 using AsiecSchedule.Update;
 using AsiecSchedule.Utils;
+using AsiecSchedule.ViewModels;
 using CommunityToolkit.Maui.Views;
+using System.Collections.ObjectModel;
 
 namespace AsiecSchedule
 {
@@ -24,7 +27,14 @@ namespace AsiecSchedule
 
             UpdateRequestIDLabel();
 
-            AppGlobals.Days = DebugUtils.GetFilledDays();
+            ObservableCollection<DayViewModel> daysViewModels = [];
+            List<DayModel> days = DebugUtils.GetFilledDays();
+            foreach (DayModel dayModel in days)
+            {
+                daysViewModels.Add(new DayViewModel(dayModel));
+            }
+
+            AppGlobals.Days = daysViewModels;
             AppGlobals.Notes = NoteUtils.GetNotes();
 
             LessonNoteSync();
@@ -37,13 +47,20 @@ namespace AsiecSchedule
 
         private static void LessonNoteSync()
         {
-            foreach (Models.NoteModel note in AppGlobals.Notes)
+            foreach (NoteModel note in AppGlobals.Notes)
             {
-                _ = AppGlobals.Days
-                    .Select(day => day
-                    .Where(lesson => lesson.Name == note.Lesson?.Name
-                                  && lesson.Date == note.Lesson?.Date)
-                    .Select(x => x.HasNote = true));
+                foreach (DayViewModel day in AppGlobals.Days)
+                {
+                    foreach (LessonViewModel lesson in day)
+                    {
+                        if (lesson.Name == note.Lesson?.Name &&
+                            lesson.Date == note.Lesson?.Date &&
+                            lesson.PrimaryInformation == note.Lesson?.PrimaryInformation)
+                        {
+                            lesson.HasNote = true;
+                        }
+                    }
+                }
             }
         }
 
