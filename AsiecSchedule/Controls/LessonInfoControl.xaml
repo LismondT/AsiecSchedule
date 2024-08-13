@@ -16,7 +16,7 @@
 
             <Label Text="{Binding NameTitle}" />
 
-            <Label Text="{Binding TeacherTitle}" />
+            <Label Text="{Binding PrimaryInformation}" />
 
         </StackLayout>
 

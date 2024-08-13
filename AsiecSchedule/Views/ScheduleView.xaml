@@ -9,7 +9,7 @@
 
         <ToolbarItem x:Name="AddNoteToolbarItem"
                      Text="Добавить заметку"
-                     IconImageSource="add_note_toolbar_icon_dark.png"
+                     IconImageSource="add_note_toolbar_icon.png"
                      Clicked="AddNoteToolbarItem_Clicked" />
 
     </ContentPage.ToolbarItems>
@@ -25,6 +25,7 @@
         </Grid.RowDefinitions>
 
         <CollectionView x:Name="ScheduleCollection"
+                        Margin="5, 0"
                         MaximumWidthRequest="600"
                         VerticalScrollBarVisibility="Never"
                         IsGrouped="True"
@@ -61,14 +62,25 @@
                     <Border Style="{StaticResource CollectionItemBorder}">
 
                         <StackLayout>
-                            
-                            <Label Text="{Binding Preview}" FontSize="Small" />
+
+                            <Grid ColumnDefinitions="*, auto">
+                                
+                                <Label Text="{Binding Preview}" FontSize="Small" />
+
+                                <Image Source="{AppThemeBinding Light=allnotes_page_icon.png,
+                                                                 Dark=allnotes_page_icon_dark.png}"
+                                       WidthRequest="16"
+                                       HeightRequest="16"
+                                       IsVisible="{Binding HasNote}"
+                                       Grid.Column="1" />
+
+                            </Grid>
 
                             <Label Text="{Binding NameTitle}" FontSize="Small" />
 
-                            <Label Text="{Binding TeacherTitle}" FontSize="Small" />
+                            <Label Text="{Binding PrimaryInformation}" FontSize="Small" />
 
-                            <Label Text="{Binding Location}" FontSize="Small" />
+                            <Label Text="{Binding SecondaryInformation}" FontSize="Small" />
 
                         </StackLayout>
 

@@ -3,7 +3,6 @@
     x:Class="AsiecSchedule.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:converters="clr-namespace:AsiecSchedule.Converters"
     xmlns:views="clr-namespace:AsiecSchedule.Views"
     xmlns:data="clr-namespace:AsiecSchedule.Data"
     xmlns:local="clr-namespace:AsiecSchedule"
@@ -15,13 +14,17 @@
         <Frame Margin="0"
                Padding="10"
                CornerRadius="0"
-               BackgroundColor="{StaticResource PrimaryDark}">
+               BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
+                                                  Dark={StaticResource PrimaryDark}}"
+               BorderColor="{AppThemeBinding Light={StaticResource Primary},
+                                              Dark={StaticResource PrimaryDark}}">
             
             <Label x:Name="RequestIDLabel"
                    HorizontalOptions="Center"
                    FontSize="Medium"
                    FontAttributes="Bold"
-                   TextColor="{StaticResource PrimaryDarkText}"/>
+                   TextColor="{AppThemeBinding Light={StaticResource White},
+                                                Dark={StaticResource PrimaryDarkText}}"/>
         
         </Frame>
     
@@ -30,28 +33,39 @@
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
 
         <ShellContent
-            FlyoutIcon="{AppThemeBinding Light=schedule_page_icon.png, Dark=schedule_page_icon_dark.png}"
+            FlyoutIcon="{AppThemeBinding Light=schedule_page_icon.png,
+                                          Dark=schedule_page_icon_dark.png}"
             Title="Расписание"
             Route="ScheduleView"
             ContentTemplate="{DataTemplate views:ScheduleView}" />
 
         <ShellContent
-            FlyoutIcon="{AppThemeBinding Light=info_page_icon.png, Dark=info_page_icon_dark.png}"
+            FlyoutIcon="{AppThemeBinding Light=info_page_icon.png,
+                                          Dark=info_page_icon_dark.png}"
             Title="Предстоящие пары"
             Route="InfoView"
             ContentTemplate="{DataTemplate views:InfoView}" />
         
         <ShellContent
-            FlyoutIcon="{AppThemeBinding Light=allnotes_page_icon.png, Dark=allnotes_page_icon_dark.png}"
+            FlyoutIcon="{AppThemeBinding Light=allnotes_page_icon.png,
+                                          Dark=allnotes_page_icon_dark.png}"
             Title="Заметки"
             Route="AllNotesView"
             ContentTemplate="{DataTemplate views:AllNotesView}" />
 
         <ShellContent
-            FlyoutIcon="{AppThemeBinding Light=settings_page_icon.png, Dark=settings_page_icon_dark.png}"
+            FlyoutIcon="{AppThemeBinding Light=settings_page_icon.png,
+                                          Dark=settings_page_icon_dark.png}"
             Title="Настройки"
             Route="SettingsView"
             ContentTemplate="{DataTemplate views:SettingsView}" />
+
+        <ShellContent
+            FlyoutIcon="{AppThemeBinding Light=about_page_icon.png,
+                                          Dark=about_page_icon_dark.png}"
+            Title="О приложении"
+            Route="AboutView"
+            ContentTemplate="{DataTemplate views:AboutView}" />
 
     </FlyoutItem>
 

@@ -8,13 +8,13 @@ namespace AsiecSchedule.Data
     
     public static class AppGlobals
     {
-        public static UpdateItem? FlyoutMenuUpdateRequestIDLabel { get; set; }
-        public static UpdateItem? CheckUpdates {  get; set; }
-        public static UpdateItem? OnPermissionsSuccess { get; set; }
-        public static UpdateItem? OnPermissionsDenied { get; set; }
+        public static UpdateItem? FlyoutMenuUpdateRequestIDLabel { get; set; } = null;
+        public static UpdateItem? CheckUpdates { get; set; } = null;
+        public static UpdateItem? OnPermissionsSuccess { get; set; } = null;
+        public static UpdateItem? OnPermissionsDenied { get; set; } = null;
 
-        public static List<DayModel> Days { get; set; } = DebugUtils.GetFilledDays();
-        public static DayModel CurrentDay { get; set; } = Days[0];
+        public static ObservableCollection<DayModel> Days { get; set; } = [];
+        public static DayModel? CurrentDay => Days[0];
 
         public static ObservableCollection<NoteModel> Notes { get; set; } = [];
         public static string NotesPath => Path.Combine(FileSystem.CacheDirectory, "notes");

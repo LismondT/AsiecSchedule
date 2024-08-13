@@ -1,4 +1,7 @@
-﻿namespace AsiecSchedule.Models
+﻿using AsiecSchedule.Data;
+using AsiecSchedule.Data.Asiec;
+
+namespace AsiecSchedule.Models
 {
     public class LessonModel
     {
@@ -11,6 +14,7 @@
         private TimeSpan startTime;
         private TimeSpan endTime;
         private DateTime date;
+        private bool hasNote;
 
         public int Number { get => number; set => number = value; }
         public string? Name { get => name; set => name = value; }
@@ -22,6 +26,7 @@
         public TimeSpan EndTime { get => endTime; set => endTime = value; }
         public DateTime Date { get => date; set => date = value; }
         public TimeSpan Duration => EndTime - StartTime;
+        public bool HasNote { get => hasNote; set => hasNote = value; }
 
         public string Preview => $"{Number}. ({StartTime:hh\\:mm}-{EndTime:hh\\:mm})";
         public string? NameTitle => $"Предмет: {Name}";
@@ -31,5 +36,23 @@
         public string Location => $"{ClassroomTitle} | {Territory}";
         public string DateTitle => $"{Date:M}, {Date:dddd}";
         public string DurationTitle => $"Длительность: {Duration}";
+
+        public string? PrimaryInformation => AppSettings.RequestType switch
+        {
+            RequestType.GroupId => TeacherTitle,
+            RequestType.TeacherId => GroupTitle,
+            RequestType.ClassroomId => TeacherTitle,
+            RequestType.None => string.Empty,
+            _ => string.Empty
+        };
+
+        public string? SecondaryInformation => AppSettings.RequestType switch
+        {
+            RequestType.GroupId => Location,
+            RequestType.TeacherId => Location,
+            RequestType.ClassroomId => GroupTitle,
+            RequestType.None => string.Empty,
+            _ => string.Empty
+        };
     }
 }

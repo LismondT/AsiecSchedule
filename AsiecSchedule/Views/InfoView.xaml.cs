@@ -112,9 +112,9 @@ public partial class InfoView : ContentPage
     }
 
     
-    private static (State, LessonModel?) GetState(TimeSpan targetTime, DayModel day)
+    private static (State, LessonModel?) GetState(TimeSpan targetTime, DayModel? day)
     {
-        if (day.Count == 0) return (State.Weekend, null);
+        if (day == null || day.Count == 0) return (State.Weekend, null);
 
         TimeSpan tmpTime = TimeSpan.Zero;
         bool firstIter = true;

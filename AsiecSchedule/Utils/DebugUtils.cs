@@ -1,13 +1,14 @@
 ﻿using AsiecSchedule.Data.Asiec;
 using AsiecSchedule.Models;
+using System.Collections.ObjectModel;
 
 namespace AsiecSchedule.Utils
 {
     public static class DebugUtils
     {
-        public static List<DayModel> GetFilledDays()
+        public static ObservableCollection<DayModel> GetFilledDays()
         {
-            List<DayModel> days = [];
+            ObservableCollection<DayModel> days = [];
 
             string[] names = ["Математика", "Обществознание", "Литература", "Биология", "География"];
             string[] groups = [.. AsiecData.GroupIDs.Keys];
@@ -33,6 +34,7 @@ namespace AsiecSchedule.Utils
                         Teacher = teachers[Random.Shared.Next(teachers.Length)],
                         StartTime = new TimeSpan(j, 30, 0),
                         EndTime = new TimeSpan(j+1, 00, 0),
+                        HasNote = false,
                         Date = date
                     });
                 }

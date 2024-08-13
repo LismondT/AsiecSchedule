@@ -1,6 +1,7 @@
 ﻿using AsiecSchedule.Data;
 using AsiecSchedule.Popups;
 using AsiecSchedule.Update;
+using AsiecSchedule.Utils;
 using CommunityToolkit.Maui.Views;
 
 namespace AsiecSchedule
@@ -22,11 +23,28 @@ namespace AsiecSchedule
             base.OnAppearing();
 
             UpdateRequestIDLabel();
-            
+
+            AppGlobals.Days = DebugUtils.GetFilledDays();
+            AppGlobals.Notes = NoteUtils.GetNotes();
+
+            LessonNoteSync();
+
             await AppUpdater.Init();
 
             if (AppSettings.IsNotifyAboutUpdate)
                 CheckUpdates();
+        }
+
+        private static void LessonNoteSync()
+        {
+            foreach (Models.NoteModel note in AppGlobals.Notes)
+            {
+                _ = AppGlobals.Days
+                    .Select(day => day
+                    .Where(lesson => lesson.Name == note.Lesson?.Name
+                                  && lesson.Date == note.Lesson?.Date)
+                    .Select(x => x.HasNote = true));
+            }
         }
 
         private void UpdateRequestIDLabel()

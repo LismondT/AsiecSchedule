@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AsiecSchedule.Views.AboutView"
+             Title="О приложении">
+
+    <Grid RowDefinitions="auto, auto, auto, *, auto">
+
+        <Label Text="Разработчик: LismondT"
+               Margin="20"
+               HorizontalOptions="Center"
+               FontSize="Medium" />
+
+        <Label Grid.Row="1"
+               Margin="10, 0">
+            <Label.Text>
+                Приложение "AsiecSchedule" предназначено для удобного и быстрого доступа к актуальному расписанию занятий колледжа Апэк. Я понимаю, как важно для студентов и преподавателей иметь под рукой актуальную информацию, и разработал инструмент, который поможет вам всегда быть в курсе изменений.
+                Также я стремлюсь постоянно улучшать приложение и добавлять новые функции, чтобы сделать ваш учебный процесс еще более удобным и организованным.
+            </Label.Text>
+        </Label>
+
+        <Frame Grid.Row="2"
+               Margin="20">
+            <Grid RowDefinitions="auto, auto, auto">
+                
+                <Label Text="Разработчику на булочку:"
+                       Margin="0, 0, 0, 5"
+                       HorizontalOptions="Center" />
+
+                <Label Grid.Row="1">
+                    <Label.FormattedText>
+                        <FormattedString>
+
+                            <Span Text="Сбербанк: " />
+                            <Span Text="2202 2050 2101 1637"
+                                  Style="{StaticResource HyperLinkSpan}">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SaveToClipboardCommand}"
+                                                          CommandParameter="2202 2050 2101 1637" />
+                                </Span.GestureRecognizers>
+                            </Span>
+
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Label Grid.Row="2">
+                    <Label.FormattedText>
+                        <FormattedString>
+
+                            <Span Text="ВТБ: " />
+                            <Span Text="2200 2460 7953 6655"
+                                  Style="{StaticResource HyperLinkSpan}">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SaveToClipboardCommand}"
+                                                          CommandParameter="2200 2460 7953 6655" />
+                                </Span.GestureRecognizers>
+                            </Span>
+
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+            </Grid>
+        </Frame>
+
+        <Label Grid.Row="4"
+               HorizontalOptions="Center"
+               Margin="0, 0, 0, 10">
+            <Label.FormattedText>
+                <FormattedString>
+
+                    <Span Text="Обратная связь: " />
+
+                    <Span Text="телеграм"
+                          Style="{StaticResource HyperLinkSpan}">
+
+                        <Span.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding TapCommand}"
+                                                CommandParameter="https://t.me/LismondT/"/>
+                        </Span.GestureRecognizers>
+
+                    </Span>
+
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+
+    </Grid>
+
+</ContentPage>

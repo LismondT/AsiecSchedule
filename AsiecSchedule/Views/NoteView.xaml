@@ -25,7 +25,7 @@
 
         <CollectionView x:Name="ImagesCollection"
                         Margin="5"
-                        MaximumHeightRequest="512"
+                        MaximumHeightRequest="216"
                         SelectionMode="Single"
                         SelectionChanged="ImagesCollection_SelectionChanged"
                         Grid.Row="2"
@@ -49,6 +49,7 @@
         </CollectionView>
 
         <CollectionView x:Name="FilesCollection"
+                        Margin="5"
                         Grid.Row="3"
                         Grid.ColumnSpan="6">
 
@@ -60,14 +61,12 @@
 
                 <DataTemplate>
 
-                    <Frame Padding="5"
-                           Margin="5, 0, 0, 5"
-                           HeightRequest="32"
-                           CornerRadius="0">
+                    <Border Style="{StaticResource FileBorder}"
+                            Padding="5, 2">
 
                         <Label Text="{Binding .}" />
 
-                    </Frame>
+                    </Border>
 
                 </DataTemplate>
                 
@@ -75,10 +74,14 @@
             
         </CollectionView>
 
-        <Editor x:Name="NoteEditor"
-                IsReadOnly="True"
+        <Border StrokeShape="RoundRectangle 15"
                 Grid.Row="4"
-                Grid.ColumnSpan="6" />
+                Grid.ColumnSpan="6">
+
+            <Editor x:Name="NoteEditor"
+                    IsReadOnly="True" />
+
+        </Border>
         
     </Grid>
 

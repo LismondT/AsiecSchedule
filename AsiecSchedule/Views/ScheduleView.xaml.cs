@@ -45,15 +45,6 @@ public partial class ScheduleView : ContentPage
         //Schedule schedule = await AsiecParser.GetSchedule(requestId, requestType, firstDate, lastDate);
 
         //LoadSchedule(schedule);
-
-        //Debug
-        List<DayModel> days = DebugUtils.GetFilledDays();
-
-
-
-        GroupedDaysViewModel daysViewModel = new(days);
-
-        ScheduleCollection.ItemsSource = daysViewModel.Days;
     }
 
 
@@ -70,7 +61,7 @@ public partial class ScheduleView : ContentPage
             return;
 
         SetAddNoteMode(false);
-        if (AppGlobals.Notes.Where(x => x.Lesson == lesson).Count() == 0)
+        if (AppGlobals.Notes.Count(x => x.Lesson == lesson) == 0)
         {
             await Navigation.PushModalAsync(new AddNoteView(lesson));
         }
@@ -98,8 +89,8 @@ public partial class ScheduleView : ContentPage
             : "Расписание";
 
         icon = mode
-            ? "editor_remove_button_activated_dark.png"
-            : "add_note_toolbar_icon_dark.png";
+            ? "add_note_toolbar_activated_icon.png"
+            : "add_note_toolbar_icon.png";
 
         AddNoteToolbarItem.IconImageSource = icon;
     }

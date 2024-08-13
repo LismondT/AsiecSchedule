@@ -450,6 +450,14 @@
         <Setter Property="Stroke" Value="{AppThemeBinding Light=LightGray, Dark=Gray}" />
 
     </Style>
+
+    <Style TargetType="Span" x:Key="HyperLinkSpan">
+
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary},
+                                                              Dark={StaticResource PrimaryDark}}" />
+        <Setter Property="TextDecorations" Value="Underline" />
+
+    </Style>
     
     <!--#endregion-->
     

@@ -33,8 +33,7 @@ namespace AsiecSchedule.Utils
 
             foreach (NoteModel? noteModel in noteModels)
             {
-                if (noteModel == null) continue;
-                notes.Add(noteModel);
+                if (noteModel != null) notes.Add(noteModel);
             }
 
             return notes;

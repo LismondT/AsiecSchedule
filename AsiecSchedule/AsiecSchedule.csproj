@@ -74,7 +74,8 @@
 
 	<ItemGroup>
 	  <None Remove="Platforms\Android\Resources\xml\provider_paths.xml" />
-	  <None Remove="Resources\Images\add_note_toolbar_icon.png" />
+	  <None Remove="Resources\Images\about_page_icon.png" />
+	  <None Remove="Resources\Images\add_note_toolbar_activated_icon.png" />
 	  <None Remove="Resources\Images\allnotes_page_icon.png" />
 	  <None Remove="Resources\Images\arrow_left.png" />
 	  <None Remove="Resources\Images\editor_file_button.png" />
@@ -101,6 +102,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Popups\UpdatePopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\AboutView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\AddNoteView.xaml">

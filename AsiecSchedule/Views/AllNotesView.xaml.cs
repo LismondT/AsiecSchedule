@@ -33,12 +33,19 @@ public partial class AllNotesView : ContentPage
     }
 
 
-    private List<NotesGroup> GetNotesGroups()
+    private static List<NotesGroup> GetNotesGroups()
     {
         List<NotesGroup> notesGroups = [.. AppGlobals.Notes
-            .GroupBy(note => note.Lesson?.Date.Date) // Группируем по дате
-            .Select(group => new NotesGroup($"{group.Key:M}, {group.Key:dddd}" ?? "Unknown", [.. group])) // Создаём NotesGroup
+            .Where(note => note.IsForNextLesson == false)
+            .GroupBy(note => note.Lesson?.Date.Date)
+            .Select(group => new NotesGroup($"{group.Key:M}, {group.Key:dddd}" ?? "Unknown", [.. group.OrderBy(x => x.Lesson?.Number)]))
             .OrderBy(group => group.Name)];
+
+        NotesGroup forNextLesson = new("Не выявленные", [.. AppGlobals.Notes.Where(note => note.IsForNextLesson == true)]);
+        if (forNextLesson.Count > 0)
+        {
+            notesGroups.Add(forNextLesson);
+        }
 
         return notesGroups;
     }
