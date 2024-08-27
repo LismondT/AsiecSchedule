@@ -61,14 +61,18 @@ public partial class ScheduleView : ContentPage
             return;
 
         SetAddNoteMode(false);
-        if (AppGlobals.Notes.Count(x => x.Lesson?.Name == lesson.Name &&
-                                        x.Lesson?.Date == lesson.Date) == 0)
+        if (!AppGlobals.Notes.Any(x => x.Lesson?.Name == lesson.Name &&
+                                        x.Lesson?.Date == lesson.Date))
         {
             await Navigation.PushModalAsync(new AddNoteView(lesson));
         }
         else
         {
-            await DisplayAlert("-_-", "На эту пару уже есть заметка", "ок");
+            NoteModel? note = NoteUtils.FindNote(lesson);
+
+            if (note == null) return;
+
+            await Navigation.PushModalAsync(new AddNoteView(note));
         }
     }
 

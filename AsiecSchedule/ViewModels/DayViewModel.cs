@@ -18,5 +18,7 @@ namespace AsiecSchedule.ViewModels
         }
         
         public string Name => $"{_model.Date:M}, {_model.Date:dddd}";
+
+        public DateTime Date => _model.Date;
     }
 }

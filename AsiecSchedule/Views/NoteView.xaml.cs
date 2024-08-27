@@ -96,7 +96,7 @@ public partial class NoteView : ContentPage
 
 		string filepath = _filenameToPath[filename];
 
-        await Launcher.Default.OpenAsync(new OpenFileRequest("Выберете приложение", new ReadOnlyFile(filepath)));
+        await Launcher.Default.OpenAsync(new OpenFileRequest("Выберите приложение", new ReadOnlyFile(filepath)));
     }
 
 
@@ -108,7 +108,7 @@ public partial class NoteView : ContentPage
 
     private async void RemoveButton_Clicked(object sender, EventArgs e)
 	{
-		bool deleteNote = await DisplayAlert("Вы точно хотите удалить заметку?", string.Empty, "Да", "Нет");
+		bool deleteNote = await DisplayAlert("Вы точно хотите удалить заметку?", null, "Да", "Нет");
 
 		if (!deleteNote) return;
 

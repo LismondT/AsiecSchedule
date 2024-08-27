@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "140244825937",
+    "project_id": "asiecschedule",
+    "storage_bucket": "asiecschedule.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:140244825937:android:b0cfc375f76f8046650570",
+        "android_client_info": {
+          "package_name": "com.lismondt.asiecschedule"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBya3RTXSJq35OIH5yKQnqnQD7luOQg9gM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

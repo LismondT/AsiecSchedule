@@ -2,18 +2,23 @@
 
 namespace AsiecSchedule.Converters
 {
-    class IntToBoolConverter : IValueConverter
+    public class StringToBoolConverter : IValueConverter
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            return false;
-            return (int)value != 0;
+            if (value == null) return false;
+
+            if (value is string str)
+            {
+                return str.Length != 0;
+            }
+
+            return true;
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             return false;
-            return (bool)value ? 1 : 0;
         }
     }
 }

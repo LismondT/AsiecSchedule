@@ -1,5 +1,6 @@
 ﻿using AsiecSchedule.Data;
 using AsiecSchedule.Models;
+using AsiecSchedule.ViewModels;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 
@@ -42,6 +43,19 @@ namespace AsiecSchedule.Utils
 
         public static void DeleteNote(NoteModel model) => DeleteNote(model.ID);
 
+
+        public static NoteModel? FindNote(LessonViewModel lesson)
+        {
+            return AppGlobals.Notes
+                .Where(note =>
+                note.Lesson?.Name == lesson.Name &&
+                note.Lesson?.Date == lesson.Date &&
+                note.Lesson?.StartTime == lesson.StartTime &&
+                note.Lesson?.EndTime == lesson.EndTime &&
+                note.Lesson?.PrimaryInformation == lesson.PrimaryInformation &&
+                note.Lesson?.SecondaryInformation == lesson.SecondaryInformation)
+                .FirstOrDefault();
+        }
         
         public static void DeleteNote(string? id)
         {
@@ -80,7 +94,9 @@ namespace AsiecSchedule.Utils
             return folderPath;
         }
 
+
         public static string GetNoteFolderPath(string id) => GetNoteFolderPath(new NoteModel() { ID = id });
+
 
         public static string GetNotePath(NoteModel note) => GetNoteFolderPath(note) + "note.json";
 

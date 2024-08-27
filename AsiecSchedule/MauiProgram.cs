@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
-using Microsoft.Maui.Platform;
 
 namespace AsiecSchedule
 {
@@ -9,6 +8,7 @@ namespace AsiecSchedule
     {
         public static MauiApp CreateMauiApp()
         {
+            
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
@@ -20,7 +20,7 @@ namespace AsiecSchedule
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

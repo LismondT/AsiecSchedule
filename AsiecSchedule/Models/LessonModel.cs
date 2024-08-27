@@ -13,7 +13,7 @@ namespace AsiecSchedule.Models
         private string? territory;
         private TimeSpan startTime;
         private TimeSpan endTime;
-        private DateTime date;
+        private DateTime? date;
         private bool hasNote;
 
         public int Number { get => number; set => number = value; }
@@ -24,7 +24,7 @@ namespace AsiecSchedule.Models
         public string? Territory { get => territory; set => territory = value; }
         public TimeSpan StartTime { get => startTime; set => startTime = value; }
         public TimeSpan EndTime { get => endTime; set => endTime = value; }
-        public DateTime Date { get => date; set => date = value; }
+        public DateTime? Date { get => date; set => date = value; }
         public TimeSpan Duration => EndTime - StartTime;
         public bool HasNote { get => hasNote; set => hasNote = value; }
 

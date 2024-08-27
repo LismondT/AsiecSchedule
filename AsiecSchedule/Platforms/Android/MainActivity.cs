@@ -1,10 +1,9 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.OS;
 using AsiecSchedule.Data;
-using AsiecSchedule.Popups;
-using AsiecSchedule.Update;
-using CommunityToolkit.Maui.Views;
+
 
 namespace AsiecSchedule
 {
@@ -26,6 +25,13 @@ namespace AsiecSchedule
                     AppGlobals.OnPermissionsDenied?.Invoke();
                 }
             }
+        }
+
+        protected override void OnCreate(Bundle? savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+
+            
         }
 
     }

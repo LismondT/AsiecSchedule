@@ -126,7 +126,7 @@ namespace AsiecSchedule.ViewModels
             }
         }
 
-        public DateTime Date
+        public DateTime? Date
         {
             get => _model.Date;
             set
@@ -160,7 +160,18 @@ namespace AsiecSchedule.ViewModels
         public string? TeacherTitle => $"Преподаватель: {Teacher}";
         public string? ClassroomTitle => $"Аудитория: {Classroom}";
         public string Location => $"{ClassroomTitle} | {Territory}";
-        public string DateTitle => $"{Date:M}, {Date:dddd}";
+        public string DateTitle
+        {
+            get
+            {
+                if (_model.Date != null)
+                {
+                    return $"{Date:M}, {Date:dddd}";
+                }
+                return "Дата не обнаруженна";
+            }
+        }
+
         public string DurationTitle => $"Длительность: {Duration}";
 
         public string? PrimaryInformation => AppSettings.RequestType switch

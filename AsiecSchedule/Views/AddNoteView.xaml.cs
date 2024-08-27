@@ -8,6 +8,9 @@ namespace AsiecSchedule.Views;
 
 public partial class AddNoteView : ContentPage
 {
+    private bool _isEditMode = false;
+    private readonly NoteModel? _editedNote;
+
     private bool _isToRemove = false;
     private readonly LessonViewModel _lesson;
     private readonly string _id;
@@ -21,12 +24,38 @@ public partial class AddNoteView : ContentPage
     private readonly ObservableCollection<ImageSource> _imageSources;
     private readonly Dictionary<ImageSource, string> _imageSourceToPath;
 
-    
-    public AddNoteView(LessonViewModel model)
+
+    public AddNoteView(LessonViewModel model, bool isLessonBusy = false)
     {
         InitializeComponent();
 
         _lesson = model;
+
+        if (isLessonBusy)
+        {
+            LessonViewModel? nextLesson = FindNextLesson();
+
+            if (nextLesson != null)
+            {
+                _lesson = nextLesson;
+            }
+            else
+            {
+                _lesson = new()
+                {
+                    Date = null,
+                    Name = model.Name,
+                    Group = model.Group,
+                    Teacher = model.Teacher,
+                    Territory = model.Territory,
+                    Classroom = model.Classroom,
+                    StartTime = model.StartTime,
+                    EndTime = model.EndTime,
+                    HasNote = true
+                };
+            }
+        }
+
         _id = Path.GetRandomFileName();
         LessonInfo.BindingContext = _lesson;
 
@@ -39,6 +68,42 @@ public partial class AddNoteView : ContentPage
         _imageSources = [];
         _imageSourceToPath = [];
 
+        ImagesCollection.ItemsSource = _imageSources;
+        FilesCollection.ItemsSource = _fileNames;
+    }
+
+
+    //Edit note
+    public AddNoteView(NoteModel note)
+    {
+        InitializeComponent();
+
+        _isEditMode = true;
+        _editedNote = note;
+
+        _id = _editedNote.ID ?? throw new Exception();
+        _lesson = _editedNote.Lesson ?? throw new Exception();
+
+        _streams = [];
+
+        _fileFullpaths = [];
+        _imageFullpaths = [];
+
+        _fileNames = [];
+        _imageSources = [];
+        _imageSourceToPath = [];
+
+        foreach (var filepath in note.ImagePaths)
+        {
+            AddImage(filepath);
+        }
+
+        foreach (var filepath in note.FilePaths)
+        {
+            AddFile(filepath);
+        }
+
+        LessonInfo.BindingContext = _lesson;
         ImagesCollection.ItemsSource = _imageSources;
         FilesCollection.ItemsSource = _fileNames;
     }
@@ -59,21 +124,34 @@ public partial class AddNoteView : ContentPage
     {
         foreach (string path in _fileFullpaths)
         {
+            if (_isEditMode &&
+                _editedNote != null &&
+                _editedNote.FilePaths.Contains(path))
+                continue;
+
             File.Delete(path);
         }
 
         foreach (string path in _imageFullpaths)
         {
+            if (_isEditMode &&
+                _editedNote != null &&
+                _editedNote.ImagePaths.Contains(path))
+                continue;
+
             File.Delete(path);
         }
 
-        Directory.Delete(NoteUtils.GetNoteResourcesFolderPath(_id));
-        Directory.Delete(NoteUtils.GetNoteFolderPath(_id));
+        if (_isEditMode)
+        {
+            Directory.Delete(NoteUtils.GetNoteResourcesFolderPath(_id));
+            Directory.Delete(NoteUtils.GetNoteFolderPath(_id));
+        }
 
         await Navigation.PopModalAsync();
     }
-    
-    
+
+
     private async void SaveButton_Clicked(object sender, EventArgs e)
     {
         if (IsForNextLessonCheckBox.IsChecked == false)
@@ -141,13 +219,7 @@ public partial class AddNoteView : ContentPage
                 await sourceStream.CopyToAsync(localFileStream);
             }
 
-            Stream stream = File.OpenRead(localFilePath);
-            ImageSource source = ImageSource.FromStream(() => stream);
-
-            _imageFullpaths.Add(localFilePath);
-            _imageSources.Add(source);
-            _imageSourceToPath.Add(source, localFilePath);
-            _streams.Add(stream);
+            AddImage(localFilePath);
         }
     }
 
@@ -167,8 +239,7 @@ public partial class AddNoteView : ContentPage
 
                 await sourceStream.CopyToAsync(localFileStream);
 
-                _fileFullpaths.Add(localFileStream.Name);
-                _fileNames.Add(Path.GetFileName(localFileStream.Name));
+                AddFile(localFilePath);
             }
         }
         catch
@@ -229,7 +300,7 @@ public partial class AddNoteView : ContentPage
         if (e.CurrentSelection[0] is not ImageSource source) return;
 
         string filepath = _imageSourceToPath[source];
-        
+
         if (_isToRemove)
         {
 
@@ -245,13 +316,13 @@ public partial class AddNoteView : ContentPage
         }
     }
 
-    
+
     private void IsForNextLessonCheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
         IsConsiderIndependentLoadLabel.IsVisible = e.Value;
         IsConsiderIndependentLoadCheckBox.IsVisible = e.Value;
     }
-    
+
 
     private void SetRemoveState(bool isRemoveMode)
     {
@@ -273,5 +344,36 @@ public partial class AddNoteView : ContentPage
         }
 
         RemoveButton.Source = icon;
+    }
+
+
+    private LessonViewModel? FindNextLesson()
+    {
+        return AppGlobals.Days
+        .Where(day => day.Date > _lesson.Date) // Filter days that are after the current lesson's date
+        .SelectMany(day => day) // Flatten the collection to work with individual lessons
+        .Where(lesson => lesson.Name == _lesson.Name &&
+                         lesson.PrimaryInformation == _lesson.PrimaryInformation) // Filter lessons by name and primary information
+        .OrderBy(lesson => lesson.Date) // Order the lessons by date
+        .FirstOrDefault(); // Get the first matching lesson
+    }
+
+
+    private void AddImage(string filepath)
+    {
+        Stream stream = File.OpenRead(filepath);
+        ImageSource source = ImageSource.FromStream(() => stream);
+
+        _imageFullpaths.Add(filepath);
+        _imageSources.Add(source);
+        _imageSourceToPath.Add(source, filepath);
+        _streams.Add(stream);
+    }
+
+
+    private void AddFile(string filepath)
+    {
+        _fileFullpaths.Add(filepath);
+        _fileNames.Add(Path.GetFileName(filepath));
     }
 }

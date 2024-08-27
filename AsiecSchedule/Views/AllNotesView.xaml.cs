@@ -37,7 +37,7 @@ public partial class AllNotesView : ContentPage
     {
         List<NotesGroup> notesGroups = [.. AppGlobals.Notes
             .Where(note => note.IsForNextLesson == false)
-            .GroupBy(note => note.Lesson?.Date.Date)
+            .GroupBy(note => note.Lesson?.Date?.Date)
             .Select(group => new NotesGroup($"{group.Key:M}, {group.Key:dddd}" ?? "Unknown", [.. group.OrderBy(x => x.Lesson?.Number)]))
             .OrderBy(group => group.Name)];
 

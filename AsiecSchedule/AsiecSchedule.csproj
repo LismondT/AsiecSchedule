@@ -73,6 +73,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="google-services.json" />
 	  <None Remove="Platforms\Android\Resources\xml\provider_paths.xml" />
 	  <None Remove="Resources\Images\about_page_icon.png" />
 	  <None Remove="Resources\Images\add_note_toolbar_activated_icon.png" />
@@ -86,6 +87,10 @@
 	  <None Remove="Resources\Images\info_page_icon.png" />
 	  <None Remove="Resources\Images\schedule_page_icon.png" />
 	  <None Remove="Resources\Images\settings_page_icon.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <GoogleServicesJson Include="google-services.json" />
 	</ItemGroup>
 
 	<ItemGroup>
