@@ -76,6 +76,6 @@ namespace AsiecSchedule.Data
             }
         }
 
-        public static bool IsDebug { get; set; } = true;
+        public static bool IsDebug { get; set; } = false;
     }
 }

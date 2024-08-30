@@ -158,7 +158,7 @@ namespace AsiecSchedule.ViewModels
         public string? NameTitle => $"Предмет: {Name}";
         public string? GroupTitle => $"Группа: {Group}";
         public string? TeacherTitle => $"Преподаватель: {Teacher}";
-        public string? ClassroomTitle => $"Аудитория: {Classroom}";
+        public string? ClassroomTitle => $"Аудитория: {(Classroom != "\"" ? Classroom : "не указано")}";
         public string Location => $"{ClassroomTitle} | {Territory}";
         public string DateTitle
         {

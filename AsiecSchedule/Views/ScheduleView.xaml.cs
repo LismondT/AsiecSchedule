@@ -3,17 +3,23 @@ using AsiecSchedule.Data.Asiec;
 using AsiecSchedule.Models;
 using AsiecSchedule.Utils;
 using AsiecSchedule.ViewModels;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace AsiecSchedule.Views;
 
 public partial class ScheduleView : ContentPage
 {
     private bool _addNoteMode = false;
-
+    private bool _viewUserDays = false;
+    public ICommand GoToSettingsCommand => new Command(async () => await Shell.Current.GoToAsync(nameof(SettingsView)));
 
     public ScheduleView()
     {
         InitializeComponent();
+        BindingContext = this;
+        AppGlobals.UpdateScheduleDaysCollection = UpdateCollection;
+        AppGlobals.ScheduleFillDays = FillDays;
     }
 
 
@@ -21,30 +27,52 @@ public partial class ScheduleView : ContentPage
     {
         base.OnAppearing();
 
-        ScheduleCollection.ItemsSource = AppGlobals.Days;
+        NewUserInfoLabel.IsVisible = AppSettings.RequestID == string.Empty;
+        ScheduleCollection.ItemsSource = AppGlobals.UserDays ?? AppGlobals.Days;
     }
 
 
     private async void GetScheduleButton_Clicked(object sender, EventArgs e)
     {
-        DateTime firstDate = FirstDatePicker.Date.AddDays(-60);
+        DateTime firstDate = FirstDatePicker.Date;
         DateTime lastDate = SecondDatePicker.Date;
-        string requestId = "9ИСиП231"; //AppSettings.RequestId;
-        RequestType requestType = RequestType.GroupId; //AppSettings.RequestType;
+        string requestId = AppSettings.RequestID;
+        RequestType requestType = AppSettings.RequestType;
 
-        if (requestId == string.Empty || requestId == null) return;
+        if (requestId == string.Empty)
+        {
+            await DisplayAlert("Группа не выбрана", "Выберите группу в настройках", "ок");
+            return;
+        }
 
         if (firstDate > lastDate)
         {
             await DisplayAlert("Некорректная дата", "Первая дата должна быть меньше второй", "ОК");
+            SecondDatePicker.Date = FirstDatePicker.Date;
             return;
         }
 
+        ScheduleModel schedule;
+        try
+        {
+            schedule = await AsiecParser.GetSchedule(requestId, requestType, firstDate, lastDate);
+        }
+        catch (Exception)
+        {
+            await DisplayAlert("Ошибка", "В ходе получения расписания произошла ошибка", "ок");
+            return;
+        }
 
+        if (schedule == null) return;
 
-        //Schedule schedule = await AsiecParser.GetSchedule(requestId, requestType, firstDate, lastDate);
+        ObservableCollection<DayViewModel> dayViewModels = [];
+        foreach (DayModel day in schedule?.Days)
+        {
+            dayViewModels.Add(new DayViewModel(day));
+        }
 
-        //LoadSchedule(schedule);
+        AppGlobals.UserDays = dayViewModels;
+        SetUserDaysMode(true);
     }
 
 
@@ -62,7 +90,9 @@ public partial class ScheduleView : ContentPage
 
         SetAddNoteMode(false);
         if (!AppGlobals.Notes.Any(x => x.Lesson?.Name == lesson.Name &&
-                                        x.Lesson?.Date == lesson.Date))
+                                        x.Lesson?.Date == lesson.Date &&
+                                        x.Lesson?.StartTime == lesson.StartTime &&
+                                        x.Lesson?.PrimaryInformation == lesson.PrimaryInformation))
         {
             await Navigation.PushModalAsync(new AddNoteView(lesson));
         }
@@ -79,14 +109,20 @@ public partial class ScheduleView : ContentPage
 
     private void AddNoteToolbarItem_Clicked(object sender, EventArgs e)
     {
-        SetAddNoteMode(!_addNoteMode);
+        if (_viewUserDays)
+        {
+            SetUserDaysMode(false);
+        }
+        else
+        {
+            SetAddNoteMode(!_addNoteMode);
+        }
     }
 
 
     private void SetAddNoteMode(bool mode)
     {
         string icon;
-
         _addNoteMode = mode;
 
         Title = mode
@@ -98,5 +134,63 @@ public partial class ScheduleView : ContentPage
             : "add_note_toolbar_icon.png";
 
         AddNoteToolbarItem.IconImageSource = icon;
+    }
+
+    private void SetUserDaysMode(bool mode)
+    {
+        _viewUserDays = mode;
+
+        if (mode)
+        {
+            ScheduleCollection.ItemsSource = AppGlobals.UserDays;
+            AddNoteToolbarItem.IconImageSource = "arrow_left_dark.png";
+        }
+        else
+        {
+            AppGlobals.UserDays = null;
+            ScheduleCollection.ItemsSource = AppGlobals.Days;
+            FirstDatePicker.Date = DateTime.Now;
+            SecondDatePicker.Date = DateTime.Now;
+            SetAddNoteMode(false);
+        }
+
+        UpdateCollection();
+    }
+
+    private void UpdateCollection()
+    {
+        if (AppGlobals.UserDays == null)
+        {
+            ScheduleCollection.ItemsSource = AppGlobals.Days;
+        }
+        else
+        {
+            ScheduleCollection.ItemsSource = AppGlobals.UserDays;
+        }
+    }
+
+    private async void FillDays()
+    {
+        try
+        {
+            ScheduleModel? schedule = await AsiecParser.GetSchedule(AppSettings.RequestID,
+                                                                   AppSettings.RequestType,
+                                                                   DateTime.Now,
+                                                                   DateTime.Now.AddDays(AppGlobals.DaysCount));
+
+            if (schedule != null)
+            {
+                ObservableCollection<DayViewModel> days = [];
+                foreach (DayModel day in schedule.Days)
+                {
+                    days.Add(new DayViewModel(day));
+                }
+                AppGlobals.Days = days;
+            }
+        }
+        catch (Exception)
+        {
+            await DisplayAlert("Не удалось загрузить расписание", null, "ок");
+        }
     }
 }

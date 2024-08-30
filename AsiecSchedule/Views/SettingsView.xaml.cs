@@ -1,5 +1,6 @@
 using AsiecSchedule.Data;
 using AsiecSchedule.Data.Asiec;
+using AsiecSchedule.Models;
 using AsiecSchedule.Update;
 
 namespace AsiecSchedule.Views;
@@ -73,6 +74,9 @@ public partial class SettingsView : ContentPage
 		{
 			string item = picker.Items[selectedIndex];
 			AppSettings.RequestType = _itemToRequestType[item];
+			AppSettings.RequestID = string.Empty;
+			AppGlobals.FlyoutMenuUpdateRequestIDLabel?.Invoke();
+			AppGlobals.UpdateScheduleDaysCollection?.Invoke();
 		}
 
 		RequestIDSettingFrame.IsVisible = true;
@@ -80,7 +84,7 @@ public partial class SettingsView : ContentPage
     }
 
 
-    private void RequestIDPicker_SelectedIndexChanged(object sender, EventArgs e)
+    private async void RequestIDPicker_SelectedIndexChanged(object sender, EventArgs e)
     {
         Picker picker = (Picker)sender;
         int selectedIndex = picker.SelectedIndex;
@@ -89,6 +93,8 @@ public partial class SettingsView : ContentPage
         {
             string item = picker.Items[selectedIndex];
             AppSettings.RequestID = item;
+			
+			AppGlobals.ScheduleFillDays?.Invoke();
         }
 
 		AppGlobals.FlyoutMenuUpdateRequestIDLabel?.Invoke();
@@ -97,13 +103,16 @@ public partial class SettingsView : ContentPage
 
 	private void UpdateRequestIDSetting()
 	{
-        RequestIDPicker.ItemsSource = AsiecData.GetIDDict(AppSettings.RequestType).Keys.ToArray();
-        ChooseRequestIDText.Text = _typeToRequestIDLabelText[AppSettings.RequestType];
+		RequestIDPicker.ItemsSource = AsiecData.GetIDDict(AppSettings.RequestType).Keys.ToArray();
+		RequestIDPicker.SelectedIndex = -1;
+		RequestIDPicker.Title = null;
+		ChooseRequestIDText.Text = _typeToRequestIDLabelText[AppSettings.RequestType];
     }
 
-	private void OnCheckUpdatesButton_Clicked(object sender, EventArgs e)
+	private async void OnCheckUpdatesButton_Clicked(object sender, EventArgs e)
 	{
-		AppGlobals.CheckUpdates?.Invoke();
+		await AppUpdater.Init();
+		AppGlobals.CheckUpdates?.Invoke(true);
 	}
 
     private void IsDebugPicker_SelectedIndexChanged(object sender, EventArgs e)

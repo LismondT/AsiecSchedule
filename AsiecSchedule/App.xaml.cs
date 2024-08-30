@@ -1,7 +1,4 @@
-﻿using AsiecSchedule.Data;
-using AsiecSchedule.Utils;
-
-namespace AsiecSchedule
+﻿namespace AsiecSchedule
 {
     public partial class App : Application
     {

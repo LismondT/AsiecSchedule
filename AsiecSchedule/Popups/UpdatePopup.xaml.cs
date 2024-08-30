@@ -70,4 +70,9 @@ public partial class UpdatePopup : Popup
 			ProgressLabel.Text = $"{progress:P0}";
 		});
 	}
+
+    private async void OnCancelButton_Clicked(object sender, EventArgs e)
+    {
+		await CloseAsync();
+    }
 }

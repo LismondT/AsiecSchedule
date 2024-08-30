@@ -89,7 +89,7 @@ namespace AsiecSchedule.Data.Asiec
         }
 
         //TODO: Переделать Парсер
-        public static async Task<ScheduleModel> GetSchedule(string id, RequestType type, DateTime firstDate, DateTime secondDate)
+        public static async Task<ScheduleModel?> GetSchedule(string id, RequestType type, DateTime firstDate, DateTime secondDate)
         {
             ScheduleModel schedule = new()
             {
@@ -98,7 +98,7 @@ namespace AsiecSchedule.Data.Asiec
                 Days = []
             };
 
-            HtmlDocument document = new HtmlDocument();
+            HtmlDocument document = new();
             string body = await GetSheduleBody(id, type, firstDate, secondDate);
 
             document.LoadHtml(body);
@@ -108,36 +108,24 @@ namespace AsiecSchedule.Data.Asiec
             if (tbody.ChildNodes.Count < 2)
                 return schedule;
 
-            bool firstIter = true;
-            //Day day = new Day();
-            LessonModel lesson = new LessonModel();
+            DayModel? day = null;
+            LessonModel? lesson = null; 
 
             foreach (HtmlNode node in tbody.SelectNodes("//td"))
             {
-                List<LessonModel> lessons = new List<LessonModel>();
                 bool hasDataLabelAttr = node.Attributes.Contains("data-label");
                 string dataLabelValue = hasDataLabelAttr ? node.Attributes["data-label"].Value : "";
 
                 if (node.HasClass("den"))
                 {
-
                     string innerText = node.InnerText;
                     string[] parts = innerText.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                     string dateString = parts[1];
                     DateTime date = DateTime.ParseExact(dateString, "dd.MM.yyyy", CultureInfo.InvariantCulture);
 
-                    if (!firstIter)
-                    {
-                        //schedule.Days.Add(day);
-                    }
-                    firstIter = false;
-
-                    //day = new Day()
-                    //{
-                    //    Date = date,
-                    //    Lessons = lessons,
-                    //};
+                    if (day != null) schedule.Days.Add(day);
+                    day = new DayModel(date, []);
                 }
 
                 if (node.HasClass("para_b"))
@@ -181,13 +169,13 @@ namespace AsiecSchedule.Data.Asiec
                 if (node.HasClass("aud_pc"))
                 {
                     lesson.Classroom = node.InnerText;
-
-                    //TODO: fix it
-                    //day.Lessons.Add(lesson);
+                    lesson.Date = day?.Date;
+ 
+                    day?.Add(lesson);
                 }
             }
 
-            //schedule.Days.Add(day);
+            schedule.Days.Add(day);
 
             return schedule;
         }

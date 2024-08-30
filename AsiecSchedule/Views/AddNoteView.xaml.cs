@@ -103,6 +103,7 @@ public partial class AddNoteView : ContentPage
             AddFile(filepath);
         }
 
+        NoteEditor.Text = note.Text;
         LessonInfo.BindingContext = _lesson;
         ImagesCollection.ItemsSource = _imageSources;
         FilesCollection.ItemsSource = _fileNames;
@@ -142,7 +143,7 @@ public partial class AddNoteView : ContentPage
             File.Delete(path);
         }
 
-        if (_isEditMode)
+        if (!_isEditMode && _editedNote == null)
         {
             Directory.Delete(NoteUtils.GetNoteResourcesFolderPath(_id));
             Directory.Delete(NoteUtils.GetNoteFolderPath(_id));
@@ -169,6 +170,12 @@ public partial class AddNoteView : ContentPage
             FilePaths = _fileFullpaths,
             ImagePaths = _imageFullpaths,
         };
+
+        if (_isEditMode)
+        {
+            File.Delete(NoteUtils.GetNotePath(model));
+            AppGlobals.Notes.Remove(_editedNote);
+        }
 
         AppGlobals.Notes.Add(model);
         NoteUtils.SaveNote(model);

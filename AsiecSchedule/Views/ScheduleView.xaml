@@ -18,11 +18,32 @@
 
         <Grid.RowDefinitions>
     
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
             
             <RowDefinition Height="auto" />
         
         </Grid.RowDefinitions>
+
+        <Label x:Name="NewUserInfoLabel"
+               HorizontalOptions="Center"
+               Margin="0, 20, 0, 0"
+               FontSize="Small"
+               Grid.Row="0">
+            <Label.FormattedText>
+                <FormattedString>
+
+                    <Span Text="Выберите группу в " />
+                    <Span Text="настройках"
+                          Style="{StaticResource HyperLinkSpan}">
+                        <Span.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToSettingsCommand}" />
+                        </Span.GestureRecognizers>
+                    </Span>
+
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
 
         <CollectionView x:Name="ScheduleCollection"
                         Margin="5, 0"
@@ -30,7 +51,8 @@
                         VerticalScrollBarVisibility="Never"
                         IsGrouped="True"
                         SelectionMode="Single"
-                        SelectionChanged="ScheduleCollection_SelectionChanged">
+                        SelectionChanged="ScheduleCollection_SelectionChanged"
+                        Grid.Row="1">
 
             <CollectionView.ItemsLayout>
 
@@ -93,7 +115,7 @@
         </CollectionView>
 
         <Frame VerticalOptions="End"
-               Grid.Row="1"
+               Grid.Row="2"
                Padding="0">
             
             <StackLayout VerticalOptions="End"

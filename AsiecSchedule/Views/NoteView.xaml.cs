@@ -1,3 +1,4 @@
+using AsiecSchedule.Data;
 using AsiecSchedule.Models;
 using AsiecSchedule.Utils;
 
@@ -112,6 +113,7 @@ public partial class NoteView : ContentPage
 
 		if (!deleteNote) return;
 
+		_note.Lesson.HasNote = false;
 		NoteUtils.DeleteNote(_note);
 		await Navigation.PopModalAsync();
 	}

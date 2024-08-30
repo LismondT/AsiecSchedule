@@ -28,7 +28,7 @@
                                     Grid.ColumnSpan="2"
                                     Grid.Row="0" />
 
-        <Border Stroke="White"
+        <Border Stroke="{AppThemeBinding Light=Black, Dark=White}"
                 Grid.Row="1"
                 Grid.ColumnSpan="2">
 
@@ -128,7 +128,8 @@
 
         </Border>
 
-        <Frame Grid.Row="2"
+        <Frame IsVisible="False"
+               Grid.Row="2"
                Grid.ColumnSpan="2"
                Style="{StaticResource NoteSettingFrame}">
 

@@ -1,19 +1,22 @@
-﻿using Octokit;
+﻿using AsiecSchedule.Data;
+using Octokit;
 
 namespace AsiecSchedule.Update
 {
     public static class AppUpdater
     {
-        public static string TempFilePath { get; }
-        public static string? AboutUpdate { get; private set; }
         private static readonly IUpdater? _updater;
         private static readonly GitHubClient _gitHubClient;
         private static Release? _latestRelease;
+        public static string? TempFilePath { get; }
+        public static string? AboutUpdate { get; private set; }
+        public static bool FailedInit { get; private set; } = true;
 
         static AppUpdater()
         {
             _gitHubClient = new GitHubClient(new ProductHeaderValue("AsiecSchedule"));
             AboutUpdate = null;
+
 
 #if ANDROID
 
@@ -30,7 +33,16 @@ namespace AsiecSchedule.Update
         public static async Task Init()
         {
             _latestRelease = await GetLatestRelease();
-            AboutUpdate = _latestRelease.Body;
+            AboutUpdate = _latestRelease?.Body;
+
+            if (_latestRelease != null)
+            {
+                FailedInit = false;
+            }
+            else
+            {
+                FailedInit = true;
+            }
         }
 
         public static bool CheckPremissions() => _updater?.CheckPermissions() ?? throw new InvalidOperationException();
@@ -46,22 +58,38 @@ namespace AsiecSchedule.Update
             return version;
         }
 
-        public static string GetLatestVersion() => _latestRelease?.TagName ?? throw new Exception();
+        public static string? GetLatestVersion() => _latestRelease?.TagName;
 
-        public static async Task<Release> GetLatestRelease() => await _gitHubClient.Repository.Release.GetLatest("LismondT", "AsiecSchedule");
+        public static async Task<Release?> GetLatestRelease()
+        {
+            Release? release = null;
+
+            try
+            {
+                release = await _gitHubClient.Repository.Release.GetLatest("LismondT", "AsiecSchedule");
+            }
+            catch (Exception e)
+            {
+                AppGlobals.OnCheckUpdateFailed?.Invoke();
+            }
+
+            return release;
+        }
 
         public static bool IsLatestVersion()
         {
-            string releaseVersion = GetLatestVersion();
+            string? releaseVersion = GetLatestVersion();
             string appVerion = GetCurrentVersion();
+
+            if (releaseVersion == null) return true;
 
             return releaseVersion.Replace("v", "") == appVerion;
         }
 
-        public static string GetLatestVersionDownloadUrl()
+        public static string? GetLatestVersionDownloadUrl()
         {
             if (_latestRelease == null)
-                throw new Exception();
+                return null;
 
             string url = _latestRelease.Assets.Where(x => x.BrowserDownloadUrl.Contains(".apk")).FirstOrDefault()?.BrowserDownloadUrl ?? "";
             return url;
@@ -69,7 +97,7 @@ namespace AsiecSchedule.Update
 
         public static void Update()
         {
-            if (_updater == null)
+            if (_updater == null || TempFilePath == null)
                 throw new Exception();
 
             _updater.Update(TempFilePath);
@@ -77,7 +105,7 @@ namespace AsiecSchedule.Update
 
         public static void FreeTempResources()
         {
-            if (_updater == null)
+            if (_updater == null || TempFilePath == null)
                 throw new Exception();
 
             _updater.FreeTempResources(TempFilePath);

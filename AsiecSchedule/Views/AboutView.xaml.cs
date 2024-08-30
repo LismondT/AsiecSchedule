@@ -13,7 +13,7 @@ public partial class AboutView : ContentPage
         {
             await Clipboard.Default.SetTextAsync(text);
         });
-        await DisplayAlert("Текст скопирован", string.Empty, "ок");
+        await DisplayAlert("Текст скопирован", null, "ок");
     });
 
     public AboutView()

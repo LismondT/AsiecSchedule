@@ -1,9 +1,11 @@
 ﻿using AsiecSchedule.Data;
+using AsiecSchedule.Data.Asiec;
 using AsiecSchedule.Models;
 using AsiecSchedule.Popups;
 using AsiecSchedule.Update;
 using AsiecSchedule.Utils;
 using AsiecSchedule.ViewModels;
+using AsiecSchedule.Views;
 using CommunityToolkit.Maui.Views;
 using System.Collections.ObjectModel;
 
@@ -15,8 +17,11 @@ namespace AsiecSchedule
         {
             InitializeComponent();
 
+            Routing.RegisterRoute(nameof(SettingsView), typeof(SettingsView));
+
             AppGlobals.FlyoutMenuUpdateRequestIDLabel = UpdateRequestIDLabel;
             AppGlobals.CheckUpdates = CheckUpdates;
+            AppGlobals.OnCheckUpdateFailed = OnCheckUpdateFailed;
             AppGlobals.OnPermissionsSuccess = OnPermissionsSuccess;
             AppGlobals.OnPermissionsDenied = OnPermissionsDenied;
         }
@@ -27,14 +32,33 @@ namespace AsiecSchedule
 
             UpdateRequestIDLabel();
 
-            ObservableCollection<DayViewModel> daysViewModels = [];
-            List<DayModel> days = DebugUtils.GetFilledDays();
-            foreach (DayModel dayModel in days)
+            if (AppSettings.RequestID != string.Empty)
             {
-                daysViewModels.Add(new DayViewModel(dayModel));
-            }
+                ScheduleModel? days = null;
 
-            AppGlobals.Days = daysViewModels;
+                try
+                {
+                    days = await AsiecParser.GetSchedule(AppSettings.RequestID,
+                                                         AppSettings.RequestType,
+                                                         DateTime.Now,
+                                                         DateTime.Now.AddDays(14));
+                }
+                catch (Exception) {
+                    await DisplayAlert("Ошибка", "Не удалось загрузить расписание", "ок");
+                }
+
+                if (days != null)
+                {
+                    ObservableCollection<DayViewModel> daysViewModels = [];
+                    foreach (DayModel dayModel in days.Days)
+                    {
+                        daysViewModels.Add(new DayViewModel(dayModel));
+                    }
+                    AppGlobals.Days = daysViewModels;
+                    AppGlobals.UpdateScheduleDaysCollection?.Invoke();
+                }
+            }
+            
             AppGlobals.Notes = NoteUtils.GetNotes();
 
             LessonNoteSync();
@@ -42,7 +66,7 @@ namespace AsiecSchedule
             await AppUpdater.Init();
 
             if (AppSettings.IsNotifyAboutUpdate)
-                CheckUpdates();
+                CheckUpdates(false);
         }
 
         private static void LessonNoteSync()
@@ -55,6 +79,7 @@ namespace AsiecSchedule
                     {
                         if (lesson.Name == note.Lesson?.Name &&
                             lesson.Date == note.Lesson?.Date &&
+                            lesson.Number == note.Lesson?.Number &&
                             lesson.PrimaryInformation == note.Lesson?.PrimaryInformation)
                         {
                             lesson.HasNote = true;
@@ -71,7 +96,7 @@ namespace AsiecSchedule
                 : AppSettings.RequestID;
         }
 
-        private async void CheckUpdates()
+        private async void CheckUpdates(bool notifyAboutLatestUpdate)
         {
             if (!AppUpdater.IsLatestVersion())
             {
@@ -91,6 +116,13 @@ namespace AsiecSchedule
                     }
                 }
             }
+            else
+            {
+                if (notifyAboutLatestUpdate)
+                {
+                    await DisplayAlert("Установлена последняя версия", null, "ок");
+                }
+            }
         }
 
         private async void OnPermissionsSuccess()
@@ -102,6 +134,11 @@ namespace AsiecSchedule
         private async void OnPermissionsDenied()
         {
             await DisplayAlert("ಠಿ_ಠ", "Без данного разрешения установить новую версию не выйдет\nВы можете обновить приложение в настройках позже", "ок");
+        }
+
+        private async void OnCheckUpdateFailed()
+        {
+            await DisplayAlert("Не удалось получить информацию об обновлении", "Возможно отсутствует интернет соединение", "ок");
         }
     }
 }
