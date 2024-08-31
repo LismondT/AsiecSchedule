@@ -4,8 +4,11 @@
              xmlns:viewmodels="clr-namespace:AsiecSchedule.ViewModels"
              x:Class="AsiecSchedule.Controls.LessonInfoControl">
 
-    <Frame BackgroundColor="{StaticResource PrimaryDark}"
-           BorderColor="Transparent">
+    <Frame BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
+                                             Dark={StaticResource PrimaryDark}}"
+           BorderColor="{AppThemeBinding Light={StaticResource Primary},
+                                         Dark={StaticResource PrimaryDark}}"
+           CornerRadius="0">
 
         <StackLayout x:Name="LessonStackLayout"
                      x:DataType="viewmodels:LessonViewModel">
@@ -29,7 +32,7 @@
             <Style TargetType="Label">
                 
                 <Setter Property="TextColor"
-                        Value="{AppThemeBinding Light={StaticResource Black},
+                        Value="{AppThemeBinding Light={StaticResource White},
                                                  Dark={StaticResource PrimaryDarkText}}" />
                 
             </Style>

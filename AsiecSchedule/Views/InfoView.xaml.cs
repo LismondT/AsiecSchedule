@@ -73,20 +73,29 @@ public partial class InfoView : ContentPage
 
         if (AppSettings.RequestID != string.Empty)
         {
-            (State, LessonViewModel?) state = AppGlobals.CurrentDay.Date > DateTime.Now
-                                            ? (State.Weekend, null)
-                                            : GetState(DateTime.Now.TimeOfDay, AppGlobals.CurrentDay);
-            DisplayCurrentState(state.Item2, state.Item1);
-
-            if (_currentStateEndTime != null)
+            if (AppGlobals.CurrentDay == null)
             {
-                TimeSpan nextTargetTime = _currentStateEndTime.Value.Add(new TimeSpan(0, 1, 0));
-                (State, LessonViewModel?) nextState = GetState(nextTargetTime, AppGlobals.CurrentDay);
-                DisplayNextState(nextState.Item2, nextState.Item1);
+                DisplayCurrentState(null, State.Unexpected);
+                CurrentStateTitle.Text = "Расписание не было загружено";
+                NextStateFrame.IsVisible = false;
             }
             else
             {
-                NextStateFrame.IsVisible = false;
+                (State, LessonViewModel?) state = AppGlobals.CurrentDay.Date > DateTime.Now
+                                                ? (State.Weekend, null)
+                                                : GetState(DateTime.Now.TimeOfDay, AppGlobals.CurrentDay);
+                DisplayCurrentState(state.Item2, state.Item1);
+
+                if (_currentStateEndTime != null)
+                {
+                    TimeSpan nextTargetTime = _currentStateEndTime.Value.Add(new TimeSpan(0, 1, 0));
+                    (State, LessonViewModel?) nextState = GetState(nextTargetTime, AppGlobals.CurrentDay);
+                    DisplayNextState(nextState.Item2, nextState.Item1);
+                }
+                else
+                {
+                    NextStateFrame.IsVisible = false;
+                }
             }
         }
         else

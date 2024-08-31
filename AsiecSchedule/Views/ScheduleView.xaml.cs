@@ -28,6 +28,7 @@ public partial class ScheduleView : ContentPage
         base.OnAppearing();
 
         NewUserInfoLabel.IsVisible = AppSettings.RequestID == string.Empty;
+        RefreshButton.IsVisible = AppGlobals.Days == null;
         ScheduleCollection.ItemsSource = AppGlobals.UserDays ?? AppGlobals.Days;
     }
 
@@ -52,7 +53,7 @@ public partial class ScheduleView : ContentPage
             return;
         }
 
-        ScheduleModel schedule;
+        ScheduleModel? schedule;
         try
         {
             schedule = await AsiecParser.GetSchedule(requestId, requestType, firstDate, lastDate);
@@ -161,7 +162,15 @@ public partial class ScheduleView : ContentPage
     {
         if (AppGlobals.UserDays == null)
         {
-            ScheduleCollection.ItemsSource = AppGlobals.Days;
+            if (AppGlobals.Days != null)
+            {
+                RefreshButton.IsVisible = false;
+                ScheduleCollection.ItemsSource = AppGlobals.Days;
+            }
+            else
+            {
+                RefreshButton.IsVisible = true;
+            }
         }
         else
         {
@@ -174,9 +183,9 @@ public partial class ScheduleView : ContentPage
         try
         {
             ScheduleModel? schedule = await AsiecParser.GetSchedule(AppSettings.RequestID,
-                                                                   AppSettings.RequestType,
-                                                                   DateTime.Now,
-                                                                   DateTime.Now.AddDays(AppGlobals.DaysCount));
+                                                                    AppSettings.RequestType,
+                                                                    DateTime.Now,
+                                                                    DateTime.Now.AddDays(AppGlobals.DaysCount));
 
             if (schedule != null)
             {
@@ -187,10 +196,22 @@ public partial class ScheduleView : ContentPage
                 }
                 AppGlobals.Days = days;
             }
+            else
+            {
+                AppGlobals.Days = [];
+            }
         }
         catch (Exception)
         {
             await DisplayAlert("Не удалось загрузить расписание", null, "ок");
+            AppGlobals.Days = null;
         }
+
+        UpdateCollection();
+    }
+
+    private void RefreshButton_Clicked(object sender, EventArgs e)
+    {
+        FillDays();
     }
 }

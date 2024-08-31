@@ -78,12 +78,26 @@ namespace AsiecSchedule.Update
 
         public static bool IsLatestVersion()
         {
-            string? releaseVersion = GetLatestVersion();
-            string appVerion = GetCurrentVersion();
+            string? releaseString = GetLatestVersion();
+            string appString = GetCurrentVersion();
 
-            if (releaseVersion == null) return true;
+            if (releaseString == null) return true;
 
-            return releaseVersion.Replace("v", "") == appVerion;
+            releaseString = releaseString.Replace("v", "");
+
+            string[] releaseVersions = releaseString.Split('.');
+            string[] appVersions = appString.Split('.');
+
+            for (int i = 0; i < 3; i++)
+            {
+                _ = int.TryParse(releaseVersions[i], out int releaseVersion);
+                _ = int.TryParse(appVersions[i], out int appVersion);
+
+                if (appVersion > releaseVersion)
+                    return true;
+            }
+
+            return false;
         }
 
         public static string? GetLatestVersionDownloadUrl()

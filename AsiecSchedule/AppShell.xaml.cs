@@ -34,23 +34,25 @@ namespace AsiecSchedule
 
             if (AppSettings.RequestID != string.Empty)
             {
-                ScheduleModel? days = null;
+                ScheduleModel? schedule = null;
 
                 try
                 {
-                    days = await AsiecParser.GetSchedule(AppSettings.RequestID,
+                    schedule = await AsiecParser.GetSchedule(AppSettings.RequestID,
                                                          AppSettings.RequestType,
                                                          DateTime.Now,
                                                          DateTime.Now.AddDays(14));
                 }
                 catch (Exception) {
                     await DisplayAlert("Ошибка", "Не удалось загрузить расписание", "ок");
+                    AppGlobals.Days = null;
+                    AppGlobals.UpdateScheduleDaysCollection?.Invoke();
                 }
 
-                if (days != null)
+                if (schedule != null)
                 {
                     ObservableCollection<DayViewModel> daysViewModels = [];
-                    foreach (DayModel dayModel in days.Days)
+                    foreach (DayModel dayModel in schedule.Days)
                     {
                         daysViewModels.Add(new DayViewModel(dayModel));
                     }

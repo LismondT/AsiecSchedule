@@ -18,9 +18,9 @@ namespace AsiecSchedule.Data
         public static UpdateItem? ScheduleFillDays {  get; set; } = null;
 
         public const int DaysCount = 14;
-        public static ObservableCollection<DayViewModel> Days { get; set; } = [];
+        public static ObservableCollection<DayViewModel>? Days { get; set; } = [];
         public static ObservableCollection<DayViewModel>? UserDays { get; set; } = null;
-        public static DayViewModel? CurrentDay => Days[0];
+        public static DayViewModel? CurrentDay => Days?[0];
 
         public static ObservableCollection<NoteModel> Notes { get; set; } = [];
         public static string NotesPath => Path.Combine(FileSystem.CacheDirectory, "notes");
