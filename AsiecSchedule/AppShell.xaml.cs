@@ -16,7 +16,7 @@ namespace AsiecSchedule
         public AppShell()
         {
             InitializeComponent();
-
+           
             Routing.RegisterRoute(nameof(SettingsView), typeof(SettingsView));
 
             AppGlobals.FlyoutMenuUpdateRequestIDLabel = UpdateRequestIDLabel;
@@ -30,7 +30,17 @@ namespace AsiecSchedule
         {
             base.OnAppearing();
 
-            UpdateRequestIDLabel();
+            Application.Current.UserAppTheme = AppSettings.Theme;
+#if ANDROID
+			AndroidX.AppCompat.App.AppCompatDelegate.DefaultNightMode = App.Current.UserAppTheme switch
+			{
+				AppTheme.Light => AndroidX.AppCompat.App.AppCompatDelegate.ModeNightNo,
+				AppTheme.Dark => AndroidX.AppCompat.App.AppCompatDelegate.ModeNightYes,
+				_ => AndroidX.AppCompat.App.AppCompatDelegate.ModeNightFollowSystem
+			};
+#endif
+
+			UpdateRequestIDLabel();
 
             if (AppSettings.RequestID != string.Empty)
             {

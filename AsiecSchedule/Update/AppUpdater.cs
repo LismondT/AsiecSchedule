@@ -94,7 +94,14 @@ namespace AsiecSchedule.Update
                 _ = int.TryParse(appVersions[i], out int appVersion);
 
                 if (appVersion > releaseVersion)
+                {
                     return true;
+                }
+                else
+                {
+                    if (i == 2 && appVersion == releaseVersion)
+                        return true;
+                }
             }
 
             return false;

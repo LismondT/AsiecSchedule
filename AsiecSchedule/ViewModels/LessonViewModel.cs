@@ -179,7 +179,6 @@ namespace AsiecSchedule.ViewModels
             RequestType.GroupId => TeacherTitle,
             RequestType.TeacherId => GroupTitle,
             RequestType.ClassroomId => TeacherTitle,
-            RequestType.None => string.Empty,
             _ => string.Empty
         };
 
@@ -188,7 +187,6 @@ namespace AsiecSchedule.ViewModels
             RequestType.GroupId => Location,
             RequestType.TeacherId => Location,
             RequestType.ClassroomId => GroupTitle,
-            RequestType.None => string.Empty,
             _ => string.Empty
         };
 

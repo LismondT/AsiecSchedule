@@ -10,12 +10,14 @@ namespace AsiecSchedule.Data
             public const string RequestType = "RequestType";
             public const string WasUpdated = "WasUpdated";
             public const string IsNotifyAboutUpdate = "IsNotifyAboutUpdate";
+            public const string Theme = "Theme";
         }
 
         private static string _requestID;
         private static RequestType _requestType;
         private static bool _wasUpdated;
         private static bool _isNotifyAboutUpdate;
+        private static AppTheme _theme;
 
         static AppSettings()
         {
@@ -30,6 +32,13 @@ namespace AsiecSchedule.Data
             
             try { _isNotifyAboutUpdate = Preferences.Get(Keys.IsNotifyAboutUpdate, true); }
             catch { _isNotifyAboutUpdate = true; }
+
+			try { _theme = (AppTheme)Preferences.Get(Keys.Theme, (int)AppTheme.Unspecified); }
+			catch { _theme = AppTheme.Unspecified; }
+
+#if DEBUG
+            IsDebug = true;
+#endif
         }
 
         public static string RequestID
@@ -76,6 +85,18 @@ namespace AsiecSchedule.Data
             }
         }
 
-        public static bool IsDebug { get; set; } = false;
+		public static AppTheme Theme
+		{
+			get => _theme;
+
+			set
+			{
+				_theme = value;
+				Preferences.Set(Keys.Theme, (int)_theme);
+			}
+		}
+
+
+		public static bool IsDebug { get; set; } = false;
     }
 }

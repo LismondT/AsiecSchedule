@@ -1,3 +1,4 @@
+using Android.Nfc.Tech;
 using AsiecSchedule.Data;
 using AsiecSchedule.Data.Asiec;
 using AsiecSchedule.Models;
@@ -7,6 +8,14 @@ namespace AsiecSchedule.Views;
 
 public partial class SettingsView : ContentPage
 {
+	private readonly Dictionary<string, AppTheme> _themes = new()
+	{
+		{ "Системная", AppTheme.Unspecified },
+		{ "Тёмная", AppTheme.Dark },
+		{ "Светлая", AppTheme.Light },
+	};
+
+
 	private readonly Dictionary<string, RequestType> _itemToRequestType = new()
 	{
 		{ "группе",		  RequestType.GroupId	  },
@@ -30,6 +39,10 @@ public partial class SettingsView : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
+
+		//Theme
+		ThemePicker.ItemsSource = _themes.Keys.ToArray();
+		ThemePicker.Title = _themes.FirstOrDefault(x => x.Value == AppSettings.Theme).Key;
 
 		//RequestType
 		RequestTypePicker.ItemsSource = _itemToRequestType.Keys.ToArray();
@@ -131,4 +144,26 @@ public partial class SettingsView : ContentPage
     {
 		AppSettings.IsNotifyAboutUpdate = e.Value;
     }
+
+	private void ThemePicker_SelectedIndexChanged(object sender, EventArgs e)
+	{
+		Picker picker = (Picker)sender;
+		int selectedIndex = picker.SelectedIndex;
+
+		if (selectedIndex != -1)
+		{
+			string item = picker.Items[selectedIndex];
+			AppSettings.Theme = _themes[item];
+			Application.Current.UserAppTheme = AppSettings.Theme;
+
+#if ANDROID
+			AndroidX.AppCompat.App.AppCompatDelegate.DefaultNightMode = App.Current.UserAppTheme switch
+			{
+				AppTheme.Light => AndroidX.AppCompat.App.AppCompatDelegate.ModeNightNo,
+				AppTheme.Dark => AndroidX.AppCompat.App.AppCompatDelegate.ModeNightYes,
+				_ => AndroidX.AppCompat.App.AppCompatDelegate.ModeNightFollowSystem
+			};
+#endif
+		}
+	}
 }

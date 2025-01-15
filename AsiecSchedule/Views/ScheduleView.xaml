@@ -43,7 +43,7 @@
                 Grid.Row="1" />
 
         <CollectionView x:Name="ScheduleCollection"
-                        Margin="5, 0"
+                        Margin="10, 0"
                         MaximumWidthRequest="600"
                         VerticalScrollBarVisibility="Never"
                         IsGrouped="True"
@@ -55,7 +55,7 @@
 
                 <LinearItemsLayout Orientation="Vertical"
                                    ItemSpacing="{OnPlatform WinUI=2,
-                                                          Android=5}"/>
+                                                          Android=4}"/>
 
             </CollectionView.ItemsLayout>
             
@@ -95,11 +95,11 @@
 
                             </Grid>
 
-                            <Label Text="{Binding NameTitle}" FontSize="Small" />
+                            <Label Text="{Binding NameTitle}" MaxLines="2" LineBreakMode="TailTruncation"  FontSize="Small" />
 
-                            <Label Text="{Binding PrimaryInformation}" FontSize="Small" />
+                            <Label Text="{Binding PrimaryInformation}" MaxLines="1" LineBreakMode="TailTruncation" FontSize="Small" />
 
-                            <Label Text="{Binding SecondaryInformation}" FontSize="Small" />
+                            <Label Text="{Binding SecondaryInformation}" MaxLines="1" FontSize="Small" />
 
                         </StackLayout>
 
@@ -159,7 +159,7 @@
             <Style TargetType="Border" x:Key="CollectionItemBorder">
 
                 <!--<Setter Property="Margin" Value="0, 0, 0, 5" />-->
-                <Setter Property="Padding" Value="20" />
+                <Setter Property="Padding" Value="15, 10" />
                 
                 <Setter Property="Stroke"
                         Value="{AppThemeBinding Light={StaticResource Gray100},

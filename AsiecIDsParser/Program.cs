@@ -90,7 +90,7 @@ namespace AsiecIDsParser
             {
                 string key = pair.Key.Replace("\n", "").Replace("\r", "");
                 string value = pair.Value.Replace("\n", "").Replace("\r", "");
-                text += $"{{ \"{value}\", \"{key}\" }}, \n";
+                text += $"\"{value}\":\"{key}\",\n";
             }
 
             File.WriteAllText(filename, text);

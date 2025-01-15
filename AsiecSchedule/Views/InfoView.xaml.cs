@@ -68,45 +68,47 @@ public partial class InfoView : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-
-
-
-        if (AppSettings.RequestID != string.Empty)
-        {
-            if (AppGlobals.CurrentDay == null)
-            {
-                DisplayCurrentState(null, State.Unexpected);
-                CurrentStateTitle.Text = "Расписание не было загружено";
-                NextStateFrame.IsVisible = false;
-            }
-            else
-            {
-                (State, LessonViewModel?) state = AppGlobals.CurrentDay.Date > DateTime.Now
-                                                ? (State.Weekend, null)
-                                                : GetState(DateTime.Now.TimeOfDay, AppGlobals.CurrentDay);
-                DisplayCurrentState(state.Item2, state.Item1);
-
-                if (_currentStateEndTime != null)
-                {
-                    TimeSpan nextTargetTime = _currentStateEndTime.Value.Add(new TimeSpan(0, 1, 0));
-                    (State, LessonViewModel?) nextState = GetState(nextTargetTime, AppGlobals.CurrentDay);
-                    DisplayNextState(nextState.Item2, nextState.Item1);
-                }
-                else
-                {
-                    NextStateFrame.IsVisible = false;
-                }
-            }
-        }
-        else
-        {
-            DisplayCurrentState(null, State.Unexpected);
-            CurrentStateTitle.Text = "Вам следует выбрать группу";
-            NextStateFrame.IsVisible = false;
-        }
-
+        Init();
         DebugMenuFrame.IsVisible = AppSettings.IsDebug;
     }
+
+
+    private void Init()
+    {
+		if (AppSettings.RequestID != string.Empty)
+		{
+			if (AppGlobals.CurrentDay == null)
+			{
+				DisplayCurrentState(null, State.Unexpected);
+				CurrentStateTitle.Text = "Расписание не было загружено";
+				NextStateFrame.IsVisible = false;
+			}
+			else
+			{
+				(State, LessonViewModel?) state = AppGlobals.CurrentDay.Date > DateTime.Now
+												? (State.Weekend, null)
+												: GetState(DateTime.Now.TimeOfDay, AppGlobals.CurrentDay);
+				DisplayCurrentState(state.Item2, state.Item1);
+
+				if (_currentStateEndTime != null)
+				{
+					TimeSpan nextTargetTime = _currentStateEndTime.Value.Add(new TimeSpan(0, 1, 0));
+					(State, LessonViewModel?) nextState = GetState(nextTargetTime, AppGlobals.CurrentDay);
+					DisplayNextState(nextState.Item2, nextState.Item1);
+				}
+				else
+				{
+					NextStateFrame.IsVisible = false;
+				}
+			}
+		}
+		else
+		{
+			DisplayCurrentState(null, State.Unexpected);
+			CurrentStateTitle.Text = "Вам следует выбрать группу";
+			NextStateFrame.IsVisible = false;
+		}
+	}
 
     
     private void UpdateTimers()
@@ -115,8 +117,15 @@ public partial class InfoView : ContentPage
 
         string currentTimerText = _stateToTimerText[_currentState];
 
+
         if (_currentStateEndTime != null)
         {
+            if (_currentStateEndTime.Value < currentTime)
+            {
+                Init();
+                return;
+            }
+
             TimeSpan timeToEnd = _currentStateEndTime.Value - currentTime;
             currentTimerText += $"{timeToEnd:hh\\:mm\\:ss}";
         }

@@ -12,6 +12,8 @@ public partial class UpdatePopup : Popup
 	{
 		InitializeComponent();
 
+		
+
 		_httpClient = new HttpClient();
 		_sourceWasDownloaded = false;
 
